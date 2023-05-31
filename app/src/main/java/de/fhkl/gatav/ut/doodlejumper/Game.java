@@ -3,6 +3,7 @@ package de.fhkl.gatav.ut.doodlejumper;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -11,11 +12,12 @@ import androidx.core.content.ContextCompat;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
-
+    private final Player player;
     private final GameLoop gameLoop;
 
     public Game(Context context) {
         super(context);
+
 
         // get surface golder and add callback
         SurfaceHolder surfaceHolder = getHolder();
@@ -23,17 +25,34 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         gameLoop = new GameLoop(this, surfaceHolder);
 
+        //Init Player
+        player = new Player(getContext(), 200, 2000, 900, 1500);
         setFocusable(true);
     }
 
     public void update() {
-
+        //Update game state
+        player.update();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Handle touch event actions
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                player.jump();
+                player.reset();
+        }
+        return super.onTouchEvent(event);
+    }
 
     @Override
     public void draw(Canvas canvas) {
+
         super.draw(canvas);
+        drawUPS(canvas);
+        drawFPS(canvas);
+        player.draw(canvas);
     }
 
     @Override
