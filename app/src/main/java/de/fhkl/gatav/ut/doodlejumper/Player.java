@@ -6,7 +6,7 @@ import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
 
-public class Player extends GameObject{
+public class Player extends Rectangle {
 
     private double left;
 
