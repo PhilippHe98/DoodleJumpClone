@@ -4,4 +4,5 @@ public class Rectangle extends GameObject{
     public Rectangle(double posX, double posY) {
         super(posX, posY);
     }
+    public Rectangle(){}
 }

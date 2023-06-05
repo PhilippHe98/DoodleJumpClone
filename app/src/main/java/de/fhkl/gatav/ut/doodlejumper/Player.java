@@ -24,13 +24,14 @@ public class Player extends Rectangle {
     private Paint paint;
 
     public Player(Context context, double left, double top, double right, double bottom){
+        super();
         this.left = left;
         this.top = top;
         this.right = right;
         this.bottom = bottom;
 
         paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.magenta);
+        int color = ContextCompat.getColor(context, R.color.white);
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(20);
