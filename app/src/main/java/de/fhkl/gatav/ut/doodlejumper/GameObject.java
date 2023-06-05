@@ -30,7 +30,6 @@ abstract public class GameObject {
         return velocity;
     }
 
-
     abstract void update();
 
     abstract void draw(Canvas canvas);

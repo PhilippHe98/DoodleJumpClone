@@ -30,13 +30,29 @@ public abstract class Rectangle extends GameObject{
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    void draw(Canvas canvas) {
         canvas.drawRect((float)topLeft.x, (float) topLeft.y, (float) bottomRight.x,(float) bottomRight.y, paint);
     }
 
-    protected void calculateNewTopLeftAndBottomRight() {
+    private void calculateNewTopLeftAndBottomRight() {
         //position ist hier der Mittelpunkt des Vierecks
-        this.topLeft = new Vector2D(position.x - width/2, position.y -height/2);
+        this.topLeft = new Vector2D(position.x - width/2, position.y - height/2);
         this.bottomRight = new Vector2D(position.x + width/2, position.y + height/2);
+    }
+
+    public Vector2D getTopLeft() {
+        return topLeft;
+    }
+
+    public Vector2D getBottomRight() {
+        return bottomRight;
+    }
+
+    public void addBottomRight(Vector2D bottomRight) {
+        this.bottomRight.add(bottomRight);
+    }
+
+    public void addTopLeft(Vector2D topLeft) {
+        this.topLeft.add(topLeft);
     }
 }

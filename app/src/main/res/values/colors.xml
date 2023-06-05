@@ -10,4 +10,5 @@
     <color name="magenta">#FF09FF</color>
     <color name="plattform">#DAD125</color>
     <color name="powerUps">#24DF0F</color>
+    <color name="enemy">#FF0011</color>
 </resources>

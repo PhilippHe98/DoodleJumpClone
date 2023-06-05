@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
+import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
@@ -19,6 +20,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Player player;
     Vector2D playerStartPosition = new Vector2D(500,1000);
     private ArrayList<Plattform> platforms = new ArrayList<>();
+    private ArrayList<Enemy> enemies = new ArrayList<>();
     private final GameLoop gameLoop;
 
     public Game(Context context) {
@@ -32,7 +34,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Init Player
-
         player = new Player(getContext(), playerStartPosition, 100,100);
 
         // Init one Platform
@@ -49,13 +50,28 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         //Update game state
-
-        // geht noch nicht
+        //geht noch nicht
         if(player.getPosition().y > 2000.0) {
             player.setPosition(playerStartPosition);
             System.out.println("Anfangsposition");
         } else {
             player.update();
+        }
+
+        //Spawn enemies when ready
+        if(Enemy.readyToSpawn()){
+            switch(RandomGenerator.generateRandomInt()){
+                case 1 :
+                    enemies.add(new stationaryEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
+                    break;
+                case 2 :
+                    enemies.add(new hoveringEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
+                    break;
+            }
+        }
+        //Update state of each enemy
+        for(Enemy enemy : enemies){
+            enemy.update();
         }
     }
 
@@ -76,6 +92,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawUPS(canvas);
         drawFPS(canvas);
         player.draw(canvas);
+        for(Enemy enemy : enemies){
+            enemy.draw(canvas);
+        }
         for (Plattform platform: platforms) {
             platform.draw(canvas);
         }
