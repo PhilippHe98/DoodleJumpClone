@@ -40,12 +40,6 @@ public class Vector2D {
         return this;
     }
 
-    public Vector2D add(double x, double y) {
-        this.x +=x;
-        this.y +=y;
-        return this;
-    }
-
     public Vector2D subtract(Vector2D vector) {
         this.x -= vector.x;
         this.y -= vector.y;
