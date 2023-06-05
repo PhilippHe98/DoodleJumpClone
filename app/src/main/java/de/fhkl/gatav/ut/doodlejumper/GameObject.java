@@ -1,60 +1,37 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+
+import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
+
 
 abstract public class GameObject {
 
-    protected double posX;
-    protected double posY;
-    protected double velocityX;
-    protected double getVelocityY;
+    protected Vector2D position;
+    protected Vector2D velocity;
 
-
-    public GameObject(double posX, double posY) {
-        this.posX = posX;
-        this.posY = posY;
-        this.posY = posY;
-    }
-
-    public GameObject() {
+    public GameObject(Vector2D position) {
+        this.position = position;
     }
 
     public static double distanceBetweenGameObjects(GameObject obj1, GameObject obj2) {
-        return Math.sqrt(
-                Math.pow(obj1.posX - obj2.posX,2)
-                + Math.pow(obj1.posX - obj2.posX,2)
-        );
+        return obj1.position.subtract(obj2.position).magnitude();
     }
-    public double getPosX() {
-        return posX;
+    public Vector2D getPosition() {
+        return position;
     }
 
-    public void setPosX(double posX) {
-        this.posX = posX;
+    public void setPosition(Vector2D position) {
+        this.position = position;
     }
 
-    public double getPosY() {
-        return posY;
+    public Vector2D getVelocity() {
+        return velocity;
     }
 
-    public void setPosY(double posY) {
-        this.posY = posY;
-    }
-
-    public double getVelocityX() {
-        return velocityX;
-    }
-
-    public void setVelocityX(double velocityX) {
-        this.velocityX = velocityX;
-    }
-
-    public double getGetVelocityY() {
-        return getVelocityY;
-    }
-
-    public void setGetVelocityY(double getVelocityY) {
-        this.getVelocityY = getVelocityY;
+    public void setVelocityX(Vector2D velocity) {
+        this.velocity = velocity;
     }
 
     abstract void update();

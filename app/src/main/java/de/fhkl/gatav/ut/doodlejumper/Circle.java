@@ -1,7 +1,9 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
-public class Circle extends GameObject{
-    public Circle(double posX, double posY) {
-        super(posX, posY);
+import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
+
+public abstract class Circle extends GameObject{
+    public Circle(Vector2D position) {
+        super(position);
     }
 }

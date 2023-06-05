@@ -11,33 +11,16 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
+
 /*
 Diese Klasse erstellt zufällig Plattformen im Spiel
 Einheitliche Göße der Plattformen ist festegelegt als: Höhe: 30 Pixel und Breite 75 Pixel
  */
 public class Plattform extends Rectangle {
 
-    private double top;
-    private double left;
-    private double right;
-    private double bottom;
-    Paint paint = new Paint();
-    List<Plattform> platforms = new ArrayList<Plattform>();
-
-    public double getTop() {
-        return top;
-    }
-
-    public Plattform(Context context, double left, double top, double right, double bottom) {
-        super();
-        this.left = left;
-        this.right = right;
-        this.bottom = bottom;
-        this.top = top;
-        paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.plattform);
-        paint.setColor(color);
-        paint.setStyle(Paint.Style.FILL);
+    public Plattform(Context context, Vector2D position, double width, double height) {
+        super(context, position, width, height, ContextCompat.getColor(context, R.color.plattform));
     }
     public double pointOnScreen(Context context){
         /*
@@ -72,17 +55,6 @@ public class Plattform extends Rectangle {
          */
     }
 
-    public void draw(Canvas canvas) {
-
-        /*
-        Zeichnen eines Rechtecks das gelb gefüllt ist auf den Bildschirm
-         */
-    canvas.drawRect((float) left,
-                    (float) top,
-                    (float) right,
-                    (float) bottom,
-                    paint);
-    }
     public void update(){
 
     }

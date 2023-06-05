@@ -10,6 +10,8 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
+
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
@@ -27,9 +29,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Init Player
-        player = new Player(getContext(), 200, 2000, 900, 1500);
+        Vector2D playerPosition = new Vector2D(500,1000);
+        player = new Player(getContext(), playerPosition, 100,100);
+
         // Init one Platform
-        plattform = new Plattform(getContext(), 100, 1450,650, 1400);
+        plattform = new Plattform(getContext(), new Vector2D(500,2000), 2000, 50);
         setFocusable(true);
 
     }
@@ -44,8 +48,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Handle touch event actions
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                player.jump();
-                player.reset();
+
         }
         return super.onTouchEvent(event);
     }

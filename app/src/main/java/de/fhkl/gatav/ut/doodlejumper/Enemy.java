@@ -1,7 +1,9 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
-public class Enemy extends Rectangle {
-    public Enemy(double posX, double posY) {
-        super(posX, posY);
+import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
+
+public class Enemy /*extends Rectangle*/ {
+    public Enemy(Vector2D position) {
+
     }
 }
