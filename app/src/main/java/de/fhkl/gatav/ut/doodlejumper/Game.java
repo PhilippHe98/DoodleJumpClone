@@ -17,7 +17,8 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
-    private ArrayList<Plattform> plattforms = new ArrayList<>();
+    Vector2D playerStartPosition = new Vector2D(500,1000);
+    private ArrayList<Plattform> platforms = new ArrayList<>();
     private final GameLoop gameLoop;
 
     public Game(Context context) {
@@ -31,16 +32,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Init Player
-        Vector2D playerPosition = new Vector2D(500,1000);
-        player = new Player(getContext(), playerPosition, 100,100);
+
+        player = new Player(getContext(), playerStartPosition, 100,100);
 
         // Init one Platform
         Plattform plattform1 = new Plattform(getContext(), new Vector2D(300,1500), 200, 50);
         Plattform plattform2 = new Plattform(getContext(), new Vector2D(700,750), 200, 50);
         Plattform plattform3 = new Plattform(getContext(), new Vector2D(500,2000), 200, 50);
-        plattforms.add(plattform1);
-        plattforms.add(plattform2);
-        plattforms.add(plattform3);
+        platforms.add(plattform1);
+        platforms.add(plattform2);
+        platforms.add(plattform3);
 
         setFocusable(true);
 
@@ -48,7 +49,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         //Update game state
-        player.update();
+
+        // geht noch nicht
+        if(player.getPosition().y > 2000.0) {
+            player.setPosition(playerStartPosition);
+            System.out.println("Anfangsposition");
+        } else {
+            player.update();
+        }
     }
 
     @Override
@@ -68,8 +76,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawUPS(canvas);
         drawFPS(canvas);
         player.draw(canvas);
-        for (Plattform plattform: plattforms) {
-            plattform.draw(canvas);
+        for (Plattform platform: platforms) {
+            platform.draw(canvas);
         }
     }
 

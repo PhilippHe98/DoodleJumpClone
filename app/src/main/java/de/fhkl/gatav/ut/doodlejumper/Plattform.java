@@ -20,7 +20,7 @@ Einheitliche Göße der Plattformen ist festegelegt als: Höhe: 30 Pixel und Bre
 public class Plattform extends Rectangle {
 
     public Plattform(Context context, Vector2D position, double width, double height) {
-        super(context, position, width, height, ContextCompat.getColor(context, R.color.plattform));
+        super(position, width, height, ContextCompat.getColor(context, R.color.plattform));
     }
     public double pointOnScreen(Context context){
         /*

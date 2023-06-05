@@ -30,9 +30,6 @@ abstract public class GameObject {
         return velocity;
     }
 
-    public void setVelocityX(Vector2D velocity) {
-        this.velocity = velocity;
-    }
 
     abstract void update();
 

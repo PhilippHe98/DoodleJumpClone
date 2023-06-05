@@ -11,23 +11,32 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 //Abstrakte Klasse
 public abstract class Rectangle extends GameObject{
 
-    private Vector2D topLeft; // topleft.x ist left, topleft.y ist top
-    private Vector2D bottomRight; // bottomright.x ist right, bottomright.y ist bottom
-    protected Vector2D centerPoint;
+    protected Vector2D topLeft; // topleft.x ist left, topleft.y ist top
+    protected Vector2D bottomRight; // bottomright.x ist right, bottomright.y ist bottom
+    protected double width;
+    protected double height;
     protected Paint paint;
 
-    public Rectangle(Context context, Vector2D position, double width, double height, int color) {
+    public Rectangle(Vector2D position, double width, double height, int color) {
         super(position);
-        this.centerPoint = position;
-        this.topLeft = new Vector2D(centerPoint.x - width/2, centerPoint.y -height/2);
-        this.bottomRight = new Vector2D(centerPoint.x + width/2, centerPoint.y + height/2);
+        this.width = width;
+        this.height = height;
+
         paint = new Paint();
         paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
+
+        calculateNewTopLeftAndBottomRight();
     }
 
     @Override
-    void draw(Canvas canvas) {
+    public void draw(Canvas canvas) {
         canvas.drawRect((float)topLeft.x, (float) topLeft.y, (float) bottomRight.x,(float) bottomRight.y, paint);
+    }
+
+    protected void calculateNewTopLeftAndBottomRight() {
+        //position ist hier der Mittelpunkt des Vierecks
+        this.topLeft = new Vector2D(position.x - width/2, position.y -height/2);
+        this.bottomRight = new Vector2D(position.x + width/2, position.y + height/2);
     }
 }
