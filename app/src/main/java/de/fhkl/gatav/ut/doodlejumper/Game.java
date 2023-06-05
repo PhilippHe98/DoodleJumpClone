@@ -15,6 +15,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
+    private Plattform plattform;
     private final GameLoop gameLoop;
 
     public Game(Context context) {
@@ -30,7 +31,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //Init Player
         Vector2D playerPosition = new Vector2D(500,1000);
         player = new Player(getContext(), playerPosition, 100,100);
+
+
+        // Init one Platform
+        plattform = new Plattform(getContext(), new Vector2D(500,2000), 2000, 50);
+
         setFocusable(true);
+
     }
 
     public void update() {
@@ -43,8 +50,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         // Handle touch event actions
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
-//                player.jump();
-//                player.reset();
+
         }
         return super.onTouchEvent(event);
     }
@@ -56,6 +62,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawUPS(canvas);
         drawFPS(canvas);
         player.draw(canvas);
+        plattform.draw(canvas);
     }
 
     @Override

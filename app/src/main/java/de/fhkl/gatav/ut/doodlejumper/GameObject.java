@@ -1,6 +1,10 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+
+import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
+
 
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 

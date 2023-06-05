@@ -14,20 +14,17 @@ public abstract class Rectangle extends GameObject{
     private Vector2D topLeft; // topleft.x ist left, topleft.y ist top
     private Vector2D bottomRight; // bottomright.x ist right, bottomright.y ist bottom
     protected Vector2D centerPoint;
-    protected double width;
-    protected double height;
+
     protected Paint paint;
 
-    public Rectangle(Context context, Vector2D position, double width, double height) {
+    public Rectangle(Context context, Vector2D position, double width, double height, int color) {
         super(position);
-        centerPoint = position;
-        topLeft = new Vector2D(centerPoint.x - width/2, centerPoint.y -height/2);
-        bottomRight = new Vector2D(centerPoint.x +width/2, centerPoint.y + height/2);
+        this.centerPoint = position;
+        this.topLeft = new Vector2D(centerPoint.x - width/2, centerPoint.y -height/2);
+        this.bottomRight = new Vector2D(centerPoint.x + width/2, centerPoint.y + height/2);
         paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.magenta);
         paint.setColor(color);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(20);
+        paint.setStyle(Paint.Style.FILL);
     }
 
     @Override
