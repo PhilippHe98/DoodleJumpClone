@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 
 import androidx.core.content.ContextCompat;
 
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle.Player;
 import de.fhkl.gatav.ut.doodlejumper.R;
 
 /**
@@ -13,8 +14,8 @@ import de.fhkl.gatav.ut.doodlejumper.R;
  */
 public class hoveringEnemy extends Enemy {
 
-    public hoveringEnemy(Context context, double posX, double posY) {
-        super(context, posX, posY, ContextCompat.getColor(context, R.color.enemy));
+    public hoveringEnemy(Context context, double posX, double posY, Player player) {
+        super(context, posX, posY, ContextCompat.getColor(context, R.color.enemy), player);
     }
 
     @Override
