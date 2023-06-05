@@ -2,20 +2,21 @@ package de.fhkl.gatav.ut.doodlejumper;
 
 import android.graphics.Canvas;
 
+import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
+
 //Abstrakte Klasse
 public abstract class Rectangle extends GameObject{
 
-    private double topleft;
-    private double topright;
-    private double bottomleft;
-    private double bottomright;
-    protected double centerPointX;
-    protected double getCenterPointY;
+    private Vector2D topleft;
+    private Vector2D topright;
+    private Vector2D bottomleft;
+    private Vector2D bottomright;
+    protected Vector2D centerPoint;
     protected double width;
     protected double height;
 
-    public Rectangle(double posX, double posY) {
-        super(posX, posY);
+    public Rectangle(Vector2D position, double width, double height) {
+        super(position);
     }
 
     @Override
