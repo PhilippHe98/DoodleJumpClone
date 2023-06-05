@@ -10,12 +10,14 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
-    private Plattform plattform;
+    private ArrayList<Plattform> plattforms = new ArrayList<>();
     private final GameLoop gameLoop;
 
     public Game(Context context) {
@@ -33,7 +35,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         player = new Player(getContext(), playerPosition, 100,100);
 
         // Init one Platform
-        plattform = new Plattform(getContext(), new Vector2D(500,2000), 2000, 50);
+        Plattform plattform1 = new Plattform(getContext(), new Vector2D(300,1500), 200, 50);
+        Plattform plattform2 = new Plattform(getContext(), new Vector2D(700,750), 200, 50);
+        Plattform plattform3 = new Plattform(getContext(), new Vector2D(500,2000), 200, 50);
+        plattforms.add(plattform1);
+        plattforms.add(plattform2);
+        plattforms.add(plattform3);
+
         setFocusable(true);
 
     }
@@ -60,7 +68,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawUPS(canvas);
         drawFPS(canvas);
         player.draw(canvas);
-        plattform.draw(canvas);
+        for (Plattform plattform: plattforms) {
+            plattform.draw(canvas);
+        }
     }
 
     @Override
