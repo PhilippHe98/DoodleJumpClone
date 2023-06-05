@@ -31,7 +31,7 @@ public class Player extends Rectangle {
         this.bottom = bottom;
 
         paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.magenta);
+        int color = ContextCompat.getColor(context, R.color.white);
         paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(20);

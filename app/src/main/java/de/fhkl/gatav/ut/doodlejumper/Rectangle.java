@@ -18,8 +18,12 @@ public abstract class Rectangle extends GameObject{
         super(posX, posY);
     }
 
+
     @Override
     void draw(Canvas canvas) {
-        canvas.drawRect();
+
     }
+
+    public Rectangle(){}
+
 }

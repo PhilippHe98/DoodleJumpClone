@@ -13,6 +13,10 @@ abstract public class GameObject {
     public GameObject(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
+        this.posY = posY;
+    }
+
+    public GameObject() {
     }
 
     public static double distanceBetweenGameObjects(GameObject obj1, GameObject obj2) {
