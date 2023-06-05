@@ -1,11 +1,9 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameLogic;
 
 
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
-import androidx.appcompat.app.AppCompatActivity;
+import de.fhkl.gatav.ut.doodlejumper.GameLogic.Game;
 
 /**
  * MainActivity is the entry point of out application
