@@ -24,6 +24,7 @@ public class Player extends Rectangle {
     private Paint paint;
 
     public Player(Context context, double left, double top, double right, double bottom){
+        super();
         this.left = left;
         this.top = top;
         this.right = right;
