@@ -21,8 +21,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private final Player player;
     private final Vector2D playerStartPosition = new Vector2D(500,1000); //x und y werden in update überschrieben,
     Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
-    private ArrayList<Platform> platforms = new ArrayList<>();
-    private ArrayList<Enemy> enemies = new ArrayList<>();
+    public static ArrayList<Platform> platforms = new ArrayList<>();
+    public static  ArrayList<Enemy> enemies = new ArrayList<>();
     private final GameLoop gameLoop;
 
     public Game(Context context) {
@@ -39,20 +39,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         player = new Player(getContext(), playerPosition, 100,100);
 
         // Init one Platform
-        Platform platform1 = new Platform(getContext(), new Vector2D(300,1500), 200, 50);
-        Platform platform2 = new Platform(getContext(), new Vector2D(700,750), 200, 50);
+        Platform platform1 = new Platform(getContext(), new Vector2D(500,1500), 200, 50);
+        Platform platform2 = new Platform(getContext(), new Vector2D(500,750), 200, 50);
         Platform platform3 = new Platform(getContext(), new Vector2D(500,2000), 200, 50);
         platforms.add(platform1);
         platforms.add(platform2);
         platforms.add(platform3);
 
         setFocusable(true);
-
     }
     //Update game state
     public void update() {
         player.update();
-
         //Spawn enemies when ready
         if(Enemy.readyToSpawn() && enemies.size() < MAX_ENEMIES){
             switch(RandomGenerator.generateRandomInt()){

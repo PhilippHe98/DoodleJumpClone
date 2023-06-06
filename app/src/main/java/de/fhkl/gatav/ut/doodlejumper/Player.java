@@ -3,6 +3,7 @@ package de.fhkl.gatav.ut.doodlejumper;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -21,11 +22,14 @@ public class Player extends Rectangle {
     }
 
     public void update() {
-        System.out.println("position:" + position);
         position.add(velocity);
         calculateNewTopLeftAndBottomRight();
         if(position.y < 1200) moveDown();
-        if(position.y > 2000) moveUp();
+        for(Rectangle rect : Game.platforms)
+            if (this.isColliding(rect)) {
+                System.out.println("ACHTUNG KOLLISION!!!");
+                moveUp();
+            }
     }
 
     public void moveDown() {

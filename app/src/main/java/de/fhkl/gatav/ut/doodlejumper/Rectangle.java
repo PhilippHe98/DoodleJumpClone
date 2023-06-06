@@ -17,6 +17,8 @@ public abstract class Rectangle extends GameObject{
     protected Vector2D bottomRight; // bottomright.x ist right, bottomright.y ist bottom
     protected double width;
     protected double height;
+
+    protected RectF bounds;
     protected Paint paint;
 
     public Rectangle(Vector2D position, double width, double height, int color) {
@@ -42,7 +44,6 @@ public abstract class Rectangle extends GameObject{
         this.bottomRight = new Vector2D(position.x + width/2, position.y + height/2);
     }
 
-
     public Vector2D getTopLeft() {
         return topLeft;
     }
@@ -59,4 +60,15 @@ public abstract class Rectangle extends GameObject{
         this.topLeft.add(topLeft);
     }
 
+    public RectF getBounds() {
+        return new RectF((float) topLeft.x, (float) topLeft.y, (float) bottomRight.x, (float) bottomRight.y);
+    }
+
+    public boolean isColliding(Rectangle other) {
+        // Danke ChatGBT :)
+        RectF playerRectF = this.getBounds();
+        RectF otherRectF = other.getBounds();
+
+        return  playerRectF.intersect(otherRectF);
+    }
 }
