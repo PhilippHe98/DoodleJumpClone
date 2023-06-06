@@ -17,6 +17,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
+    private static final int MAX_ENEMIES = 5;
     private final Player player;
     private final Vector2D playerStartPosition = new Vector2D(500,1000); //x und y werden in update überschrieben,
     Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
@@ -53,7 +54,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         player.update();
 
         //Spawn enemies when ready
-        if(Enemy.readyToSpawn()){
+        if(Enemy.readyToSpawn() && enemies.size() < MAX_ENEMIES){
             switch(RandomGenerator.generateRandomInt()){
                 case 1 :
                     enemies.add(new stationaryEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));

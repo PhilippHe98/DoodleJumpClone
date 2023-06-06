@@ -11,7 +11,7 @@ public abstract class Enemy extends Rectangle {
 
     private static double SPEED = 0;
     private static final double MAX_SPEED = SPEED / GameLoop.MAX_UPS;
-    private static final double UPDATES_PER_SPAWN = 60;
+    private static final double UPDATES_PER_SPAWN = 300;
     private static double updatesUntilNextSpawn = UPDATES_PER_SPAWN;
 
     public Enemy(Context context, Vector2D position, double width, double height, int color) {
