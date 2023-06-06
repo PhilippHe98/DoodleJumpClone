@@ -3,6 +3,8 @@ package de.fhkl.gatav.ut.doodlejumper;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import androidx.core.content.ContextCompat;
 
@@ -40,6 +42,7 @@ public abstract class Rectangle extends GameObject{
         this.bottomRight = new Vector2D(position.x + width/2, position.y + height/2);
     }
 
+
     public Vector2D getTopLeft() {
         return topLeft;
     }
@@ -55,4 +58,5 @@ public abstract class Rectangle extends GameObject{
     public void addTopLeft(Vector2D topLeft) {
         this.topLeft.add(topLeft);
     }
+
 }

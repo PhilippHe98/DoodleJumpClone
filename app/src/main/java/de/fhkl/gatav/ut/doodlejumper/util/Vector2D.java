@@ -5,8 +5,8 @@ public class Vector2D {
     public double y;
 
     public Vector2D() {
-        x=0;
-        y=0;
+        this.x=0;
+        this.y=0;
     }
 
     public Vector2D(double x, double y) {
@@ -14,11 +14,16 @@ public class Vector2D {
         this.y = y;
     }
     public Vector2D(Vector2D vector) {
-        x = vector.x;
-        y= vector.y;
+        this.x = vector.x;
+        this.y= vector.y;
     }
     public double magnitude() {
         return Math.sqrt((this.x * this.x) + (this.y * this.y));
+    }
+
+    public void set(double x,double y) {
+        this.x = x;
+        this.y = y;
     }
 
     public Vector2D normalize() {

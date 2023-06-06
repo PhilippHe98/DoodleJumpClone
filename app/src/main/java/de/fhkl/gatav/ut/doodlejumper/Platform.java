@@ -1,15 +1,10 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import androidx.core.content.ContextCompat;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
@@ -17,9 +12,9 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 Diese Klasse erstellt zufällig Plattformen im Spiel
 Einheitliche Göße der Plattformen ist festegelegt als: Höhe: 30 Pixel und Breite 75 Pixel
  */
-public class Plattform extends Rectangle {
+public class Platform extends Rectangle {
 
-    public Plattform(Context context, Vector2D position, double width, double height) {
+    public Platform(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.plattform));
     }
     public double pointOnScreen(Context context){

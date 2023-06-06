@@ -18,8 +18,9 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
-    Vector2D playerStartPosition = new Vector2D(500,1000);
-    private ArrayList<Plattform> platforms = new ArrayList<>();
+    private final Vector2D playerStartPosition = new Vector2D(500,1000); //x und y werden in update überschrieben,
+    Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
+    private ArrayList<Platform> platforms = new ArrayList<>();
     private ArrayList<Enemy> enemies = new ArrayList<>();
     private final GameLoop gameLoop;
 
@@ -34,29 +35,22 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Init Player
-        player = new Player(getContext(), playerStartPosition, 100,100);
+        player = new Player(getContext(), playerPosition, 100,100);
 
         // Init one Platform
-        Plattform plattform1 = new Plattform(getContext(), new Vector2D(300,1500), 200, 50);
-        Plattform plattform2 = new Plattform(getContext(), new Vector2D(700,750), 200, 50);
-        Plattform plattform3 = new Plattform(getContext(), new Vector2D(500,2000), 200, 50);
-        platforms.add(plattform1);
-        platforms.add(plattform2);
-        platforms.add(plattform3);
+        Platform platform1 = new Platform(getContext(), new Vector2D(300,1500), 200, 50);
+        Platform platform2 = new Platform(getContext(), new Vector2D(700,750), 200, 50);
+        Platform platform3 = new Platform(getContext(), new Vector2D(500,2000), 200, 50);
+        platforms.add(platform1);
+        platforms.add(platform2);
+        platforms.add(platform3);
 
         setFocusable(true);
 
     }
-
+    //Update game state
     public void update() {
-        //Update game state
-        //geht noch nicht
-        if(player.getPosition().y > 2000.0) {
-            player.setPosition(playerStartPosition);
-            System.out.println("Anfangsposition");
-        } else {
-            player.update();
-        }
+        player.update();
 
         //Spawn enemies when ready
         if(Enemy.readyToSpawn()){
@@ -95,7 +89,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for(Enemy enemy : enemies){
             enemy.draw(canvas);
         }
-        for (Plattform platform: platforms) {
+        for (Platform platform: platforms) {
             platform.draw(canvas);
         }
     }
