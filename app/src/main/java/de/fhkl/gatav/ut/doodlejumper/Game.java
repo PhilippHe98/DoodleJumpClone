@@ -3,6 +3,10 @@ package de.fhkl.gatav.ut.doodlejumper;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,19 +19,27 @@ import java.util.ArrayList;
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
-public class Game extends SurfaceView implements SurfaceHolder.Callback {
+public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
 
     private static final int MAX_ENEMIES = 5;
     private final Player player;
     private final Vector2D playerStartPosition = new Vector2D(500,1000); //x und y werden in update überschrieben,
     Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
+
     public static ArrayList<Platform> platforms = new ArrayList<>();
     public static  ArrayList<Enemy> enemies = new ArrayList<>();
+
+    private SensorManager sensorManager;
+    private Sensor accelerometer;   //Deutsch: Beschleunigungsmesser
+    private float accelerationX;
     private final GameLoop gameLoop;
 
     public Game(Context context) {
         super(context);
 
+        //Init SensorManager
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         // get surface golder and add callback
         SurfaceHolder surfaceHolder = getHolder();
@@ -50,22 +62,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
     //Update game state
     public void update() {
+        processSensorData(accelerationX);
         player.update();
-        //Spawn enemies when ready
-        if(Enemy.readyToSpawn() && enemies.size() < MAX_ENEMIES){
-            switch(RandomGenerator.generateRandomInt()){
-                case 1 :
-                    enemies.add(new stationaryEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
-                    break;
-                case 2 :
-                    enemies.add(new hoveringEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
-                    break;
-            }
-        }
-        //Update state of each enemy
-        for(Enemy enemy : enemies){
-            enemy.update();
-        }
+        spawnAndUpdateEnemies();
     }
 
     @Override
@@ -123,5 +122,52 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("FPS: " + averageFPS,100, 200, paint);
+    }
+
+    public void spawnAndUpdateEnemies(){
+        //Spawn enemies when ready
+        if(Enemy.readyToSpawn() && enemies.size() < MAX_ENEMIES){
+            switch(RandomGenerator.generateRandomInt()){
+                case 1 :
+                    enemies.add(new stationaryEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
+                    break;
+                case 2 :
+                    enemies.add(new hoveringEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
+                    break;
+            }
+        }
+        //Update state of each enemy
+        for(Enemy enemy : enemies){
+            enemy.update();
+        }
+    }
+    private void processSensorData(float accelerationX) {
+        player.moveSideways(accelerationX);
+    }
+
+    //Methoden für Sensor
+    public void registerSensorListener() {
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+
+
+    public void unregisterSensorListener() {
+        sensorManager.unregisterListener(this);
+    }
+
+    public float getAccelerationX() {
+        return accelerationX;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            accelerationX = sensorEvent.values[0];
+        }
+    }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+        // Keine Aktion erforderlich
     }
 }

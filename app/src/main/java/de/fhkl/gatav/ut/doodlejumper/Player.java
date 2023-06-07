@@ -42,4 +42,7 @@ public class Player extends Rectangle {
     public void moveUp() {
         velocity.set(0,-MAX_SPEED);
     }
+    public void moveSideways(float accelerationX) {
+        velocity.set(-accelerationX*MAX_SPEED, velocity.y);
+    }
 }
