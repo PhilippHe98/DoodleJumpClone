@@ -51,9 +51,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         player = new Player(getContext(), playerPosition, 100,100);
 
         // Init one Platform
-        Platform platform1 = new Platform(getContext(), new Vector2D(500,1800), 200, 50);
-        Platform platform2 = new Platform(getContext(), new Vector2D(500,1900), 200, 50);
-        Platform platform3 = new Platform(getContext(), new Vector2D(500,2000), 200, 50);
+        Platform platform1 = new Platform(getContext(), new Vector2D(200,1800), 200, 50);
+        Platform platform2 = new Platform(getContext(), new Vector2D(500,1600), 200, 50);
+        Platform platform3 = new Platform(getContext(), new Vector2D(700,2000), 200, 50);
         platforms.add(platform1);
         platforms.add(platform2);
         platforms.add(platform3);
