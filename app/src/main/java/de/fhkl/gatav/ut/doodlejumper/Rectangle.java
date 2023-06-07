@@ -66,9 +66,17 @@ public abstract class Rectangle extends GameObject{
 
     public boolean isColliding(Rectangle other) {
         // Danke ChatGBT :)
-        RectF playerRectF = this.getBounds();
+        RectF thisRectF = this.getBounds();
         RectF otherRectF = other.getBounds();
 
-        return  playerRectF.intersect(otherRectF);
+        // Überprüfe, ob der Spieler von unten auf die Plattform trifft
+        boolean isPlayerAbovePlatform = (this.bottomRight.y < other.topLeft.y);
+
+        // Überprüfe die Kollision, wenn der Spieler nicht von unten auf die Plattform trifft
+        if (!isPlayerAbovePlatform) {
+            return thisRectF.intersect(otherRectF);
+        }
+
+        return false; // Kollision ignorieren, wenn der Spieler von unten auf die Plattform trifft
     }
 }

@@ -22,9 +22,13 @@ public class Player extends Rectangle {
     }
 
     public void update() {
+
         position.add(velocity);
+
         calculateNewTopLeftAndBottomRight();
-        if(position.y < 1200) moveDown();
+
+        if(position.y < 800) moveDown();
+
         for(Rectangle rect : Game.platforms)
             if (this.isColliding(rect)) {
                 System.out.println("ACHTUNG KOLLISION!!!");
