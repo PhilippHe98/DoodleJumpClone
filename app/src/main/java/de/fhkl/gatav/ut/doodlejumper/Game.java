@@ -19,21 +19,44 @@ import java.util.ArrayList;
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
+/**
+ * Hauptklasse der App die das Game und dessen Inhalte verwaltet
+ */
 public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
 
+    /**
+     * legt die max. Anzahl an Gegner die auf dem Bildschirm zu sehen sind fest
+     */
     private static final int MAX_ENEMIES = 5;
+    /**
+     * erstellen eines Player Objects
+     */
     private final Player player;
-    private final Vector2D playerStartPosition = new Vector2D(500,1000); //x und y werden in update überschrieben,
+    /**
+     * festlegen der Startposition des Spielers, dabei werden x und y in der Update Methode überschrieben
+     */
+    private final Vector2D playerStartPosition = new Vector2D(500,1000);
     Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
-
+    /**
+     * Listen die Plattformen und Gegner während des Spiels halten
+     */
     public static ArrayList<Platform> platforms = new ArrayList<>();
     public static  ArrayList<Enemy> enemies = new ArrayList<>();
-
+    /**
+     * Sensoren und Manager um die Neigung zu handlen
+     */
     private SensorManager sensorManager;
     private Sensor accelerometer;   //Deutsch: Beschleunigungsmesser
     private float accelerationX;
+    /**
+     * Erstellen eines GameLoop Objects
+     */
     private final GameLoop gameLoop;
 
+    /**
+     * Konstruktor des GameObjects das alle Inhalte des Spiels initialisiert
+     * @param context
+     */
     public Game(Context context) {
         super(context);
 
@@ -60,7 +83,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
         setFocusable(true);
     }
-    //Update game state
+
+    /**
+     * updatet kontinuierlich den Game State
+     */
     public void update() {
         processSensorData(accelerationX);
         player.update();
@@ -77,6 +103,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         return super.onTouchEvent(event);
     }
 
+    /**
+     * kümmert sich um das zeichnen der Objekte auf den Bildschirm
+     * @param canvas
+     */
     @Override
     public void draw(Canvas canvas) {
 
@@ -92,6 +122,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
     }
 
+    /**
+     * kümmert sich um den SUrface des Bildschirms und startet den Game Loop
+     * @param surfaceHolder
+     */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         gameLoop.startLoop();
@@ -105,7 +139,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     }
 
-
+    /**
+     * brechnet die Updates Per Second und zeichnet diese auf den Bildschirm
+     * @param canvas
+     */
     public void drawUPS(Canvas canvas) {
         String averageUPS = Double.toString(gameLoop.getAverageUPS());
         Paint paint = new Paint();
@@ -115,6 +152,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         canvas.drawText("UPS: " + averageUPS,100, 100, paint);
     }
 
+    /**
+     * brechnet die Frames Per Second und zeichnet diese auf den Bildschirm
+     * @param canvas
+     */
     public void drawFPS(Canvas canvas) {
         String averageFPS = Double.toString(gameLoop.getAverageFPS());
         Paint paint = new Paint();
@@ -124,6 +165,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         canvas.drawText("FPS: " + averageFPS,100, 200, paint);
     }
 
+    /**
+     * spawnen und updaten der Gegner im Spiel
+     */
     public void spawnAndUpdateEnemies(){
         //Spawn enemies when ready
         if(Enemy.readyToSpawn() && enemies.size() < MAX_ENEMIES){
@@ -156,6 +200,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         sensorManager.unregisterListener(this);
     }
 
+    /**
+     * getter für die Variable AccelartionX
+     * @return accelerationX
+     */
     public float getAccelerationX() {
         return accelerationX;
     }
