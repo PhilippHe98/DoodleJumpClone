@@ -18,7 +18,6 @@ public abstract class Rectangle extends GameObject{
     protected double width;
     protected double height;
 
-    protected RectF bounds;
     protected Paint paint;
 
     public Rectangle(Vector2D position, double width, double height, int color) {
@@ -44,39 +43,7 @@ public abstract class Rectangle extends GameObject{
         this.bottomRight = new Vector2D(position.x + width/2, position.y + height/2);
     }
 
-    public Vector2D getTopLeft() {
-        return topLeft;
-    }
-
-    public Vector2D getBottomRight() {
-        return bottomRight;
-    }
-
-    public void addBottomRight(Vector2D bottomRight) {
-        this.bottomRight.add(bottomRight);
-    }
-
-    public void addTopLeft(Vector2D topLeft) {
-        this.topLeft.add(topLeft);
-    }
-
     public RectF getBounds() {
         return new RectF((float) topLeft.x, (float) topLeft.y, (float) bottomRight.x, (float) bottomRight.y);
-    }
-
-    public boolean isColliding(Rectangle other) {
-        // Danke ChatGBT :)
-        RectF thisRectF = this.getBounds();
-        RectF otherRectF = other.getBounds();
-
-        // Überprüfe, ob der Spieler von unten auf die Plattform trifft
-        boolean isPlayerAbovePlatform = (this.bottomRight.y < other.topLeft.y);
-
-        // Überprüfe die Kollision, wenn der Spieler nicht von unten auf die Plattform trifft
-        if (!isPlayerAbovePlatform) {
-            return thisRectF.intersect(otherRectF);
-        }
-
-        return false; // Kollision ignorieren, wenn der Spieler von unten auf die Plattform trifft
     }
 }

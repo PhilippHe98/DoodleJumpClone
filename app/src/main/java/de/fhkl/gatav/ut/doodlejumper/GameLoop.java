@@ -28,9 +28,8 @@ public class GameLoop extends Thread {
         // Declare time and cycle count variables
         int updateCount = 0;
         int frameCount = 0;
-
+        double elapsedTime;
         long startTime;
-        long elapsedTime;
         long sleepTime;
 
         // Game Loop
@@ -64,7 +63,7 @@ public class GameLoop extends Thread {
             }
 
             // pause game Loop to not exceed target UPS
-            elapsedTime = System.currentTimeMillis() -startTime;
+            elapsedTime = System.currentTimeMillis() - startTime;
             sleepTime = (long) (updateCount*UPS_PERIOD - elapsedTime);
             if(sleepTime > 0) {
                 try {

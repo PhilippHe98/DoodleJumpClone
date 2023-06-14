@@ -88,6 +88,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      * updatet kontinuierlich den Game State
      */
     public void update() {
+
         processSensorData(accelerationX);
         player.update();
         spawnAndUpdateEnemies();
