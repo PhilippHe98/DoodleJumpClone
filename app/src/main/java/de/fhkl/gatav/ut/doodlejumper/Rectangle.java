@@ -46,4 +46,6 @@ public abstract class Rectangle extends GameObject{
     public RectF getBounds() {
         return new RectF((float) topLeft.x, (float) topLeft.y, (float) bottomRight.x, (float) bottomRight.y);
     }
+
+    public abstract boolean isColliding(Rectangle other);
 }

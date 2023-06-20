@@ -11,4 +11,5 @@
     <color name="plattform">#DAD125</color>
     <color name="powerUps">#24DF0F</color>
     <color name="enemy">#FF0011</color>
+    <color name="projektil">#c1976d</color>
 </resources>

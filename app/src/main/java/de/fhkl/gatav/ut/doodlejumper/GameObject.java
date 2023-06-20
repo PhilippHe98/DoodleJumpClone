@@ -19,7 +19,7 @@ abstract public class GameObject {
         return obj1.position.subtract(obj2.position).magnitude();
     }
     public Vector2D getPosition() {
-        return position;
+        return new Vector2D(position.x, position.y);
     }
 
     public void setPosition(Vector2D position) {

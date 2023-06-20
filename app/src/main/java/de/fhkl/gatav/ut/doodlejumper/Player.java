@@ -68,6 +68,7 @@ public class Player extends Rectangle {
         // Danke ChatGBT :)
         RectF thisRectF = this.getBounds();
         RectF otherRectF = other.getBounds();
+        System.out.println(other.getClass());
 
         // Überprüfe, ob der Spieler von unten auf die Plattform trifft
         boolean isPlayerAbovePlatform = (this.bottomRight.y < other.topLeft.y);

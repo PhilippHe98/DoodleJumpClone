@@ -33,4 +33,8 @@ public abstract class Enemy extends Rectangle {
         }
     }
 
+    @Override
+    public boolean isColliding(Rectangle other) {
+        return false;
+    }
 }

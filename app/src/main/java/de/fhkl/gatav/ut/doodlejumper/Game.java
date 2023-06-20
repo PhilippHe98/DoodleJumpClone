@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -41,7 +42,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      * Listen die Plattformen und Gegner während des Spiels halten
      */
     public static ArrayList<Platform> platforms = new ArrayList<>();
-    public static  ArrayList<Enemy> enemies = new ArrayList<>();
+    public static ArrayList<Enemy> enemies = new ArrayList<>();
+
+    public static ArrayList<Projectile> projectiles = new ArrayList<>();
     /**
      * Sensoren und Manager um die Neigung zu handlen
      */
@@ -92,13 +95,23 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         processSensorData(accelerationX);
         player.update();
         spawnAndUpdateEnemies();
+        updateProjectiles();
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Handle touch event actions
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                Vector2D direction = new Vector2D(event.getX(),event.getY()).subtract(playerPosition);
+                direction.normalize();
+                System.out.println(direction);
+                Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20);
+                projectiles.add(projectile);
+                System.out.println("Feuer!");
+                return true;
 
         }
         return super.onTouchEvent(event);
@@ -120,6 +133,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
         for (Platform platform: platforms) {
             platform.draw(canvas);
+        }
+        for(Projectile projectile: projectiles) {
+            projectile.draw(canvas);
         }
     }
 
@@ -164,6 +180,18 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("FPS: " + averageFPS,100, 200, paint);
+    }
+
+    private void updateProjectiles() {
+        Iterator<Projectile> iterator = projectiles.iterator();
+        while(iterator.hasNext()) {
+            Projectile projectile = iterator.next();
+            projectile.update();
+
+            if (projectile.getPosition().y < 0) {
+                iterator.remove();
+            }
+        }
     }
 
     /**
@@ -219,4 +247,5 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void onAccuracyChanged(Sensor sensor, int i) {
         // Keine Aktion erforderlich
     }
+
 }
