@@ -29,6 +29,8 @@ public class Player extends Rectangle {
      */
     public Player(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.magenta));
+
+        //startgeschwindigkeit -> fäll runter
         velocity = new Vector2D(0, MAX_SPEED);
     }
 
@@ -47,10 +49,13 @@ public class Player extends Rectangle {
         if (velocity.y >= 0) isJumping = false;
         if (velocity.y < 0) isJumping = true;
 
-        // Kollisionen resetten den Jump Timer
-        for (Rectangle rect : Game.platforms) {
-            if (this.isColliding(rect)) {
-                if (!isJumping) velocity.y = -jumpForce;
+        // Springen
+        for(Platform platform: Game.platforms) {
+            if(isColliding(this,platform)) {
+                // Wenn Spieler über Plattform ist
+                if(this.bottomRight.y > platform.topLeft.y) {
+                    if (!isJumping) velocity.y = -jumpForce;
+                }
             }
         }
         velocity.y += gravityValue;
@@ -61,24 +66,6 @@ public class Player extends Rectangle {
         position.add(velocity);
         // berechnen der neuen Maße des Rechtecks
         calculateNewTopLeftAndBottomRight();
-    }
-
-    // Kollisionserkennung
-    public boolean isColliding(Rectangle other) {
-        // Danke ChatGBT :)
-        RectF thisRectF = this.getBounds();
-        RectF otherRectF = other.getBounds();
-        System.out.println(other.getClass());
-
-        // Überprüfe, ob der Spieler von unten auf die Plattform trifft
-        boolean isPlayerAbovePlatform = (this.bottomRight.y < other.topLeft.y);
-
-        // Kollisionüberprüfung erfolg nur, wenn der Spieler oberhalb der Plattform ist.
-        if (!isPlayerAbovePlatform) {
-            return thisRectF.intersect(otherRectF);
-        }
-
-        return false; // Kollision ignorieren, wenn der Spieler von unten auf die Plattform trifft
     }
 
     /**

@@ -2,8 +2,13 @@ package de.fhkl.gatav.ut.doodlejumper;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.RectF;
 
 import androidx.core.content.ContextCompat;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
@@ -23,6 +28,7 @@ public abstract class Enemy extends Rectangle {
      * on top)
      * @return
      */
+
     public static boolean readyToSpawn(){
         if(updatesUntilNextSpawn <= 0){
             updatesUntilNextSpawn += UPDATES_PER_SPAWN;
@@ -31,10 +37,5 @@ public abstract class Enemy extends Rectangle {
             updatesUntilNextSpawn--;
             return false;
         }
-    }
-
-    @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
     }
 }

@@ -53,11 +53,6 @@ public class Platform extends Rectangle {
     public void update(){
 
     }
-
-    @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
-    }
 }
 
 

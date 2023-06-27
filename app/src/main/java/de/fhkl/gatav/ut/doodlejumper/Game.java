@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -43,7 +44,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      */
     public static ArrayList<Platform> platforms = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
-
     public static ArrayList<Projectile> projectiles = new ArrayList<>();
     /**
      * Sensoren und Manager um die Neigung zu handlen
@@ -84,6 +84,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         platforms.add(platform2);
         platforms.add(platform3);
 
+        Enemy enemie1 = new stationaryEnemy(getContext(), new Vector2D(300,300), 100,100);
+        Enemy enemie2 = new stationaryEnemy(getContext(), new Vector2D(700,300), 100,100);
+        enemies.add(enemie2);
+        enemies.add(enemie1);
         setFocusable(true);
     }
 
@@ -94,33 +98,25 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
         processSensorData(accelerationX);
         player.update();
-        spawnAndUpdateEnemies();
+        spawnEnemies();
         updateProjectiles();
-    }
 
-
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // Handle touch event actions
-        switch(event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                Vector2D direction = new Vector2D(event.getX(),event.getY()).subtract(playerPosition);
-                direction.normalize();
-                System.out.println(direction);
-                Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20);
-                projectiles.add(projectile);
-                System.out.println("Feuer!");
-                return true;
-
+        //Update state of each enemy
+        for(Enemy enemy : enemies){
+            enemy.update();
         }
-        return super.onTouchEvent(event);
+        handleProjectileCollisionWithEnemy();
+        checkGameOver();
     }
 
-    /**
-     * kümmert sich um das zeichnen der Objekte auf den Bildschirm
-     * @param canvas
-     */
+    private void checkGameOver() {
+        for (Enemy enemy: enemies) {
+            if(Rectangle.isColliding(player,enemy)) {
+                System.out.println("Game over");
+            }
+        }
+    }
+
     @Override
     public void draw(Canvas canvas) {
 
@@ -138,7 +134,22 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             projectile.draw(canvas);
         }
     }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Handle touch event actions
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Vector2D direction = new Vector2D(event.getX(),event.getY()).subtract(playerPosition);
+                direction.normalize();
+                System.out.println(direction);
+                Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20,20);
+                projectiles.add(projectile);
+                System.out.println("Feuer!");
+                return true;
 
+        }
+        return super.onTouchEvent(event);
+    }
     /**
      * kümmert sich um den SUrface des Bildschirms und startet den Game Loop
      * @param surfaceHolder
@@ -154,6 +165,25 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
 
+    }
+    // Crasht evtl lol
+    protected void handleProjectileCollisionWithEnemy() {
+        List<Enemy> enemiesToRemove = new ArrayList<>();
+        List<Projectile> projectilesToRemove = new ArrayList<>();
+        for (Projectile projectile : projectiles) {
+            for(Enemy enemy : enemies) {
+                if(Rectangle.isColliding(projectile, enemy)) {
+                    enemiesToRemove.add(enemy);
+                    projectilesToRemove.add(projectile);
+                }
+            }
+        }
+        for (Enemy enemy : enemiesToRemove) {
+            enemies.remove(enemy);
+        }
+        for(Projectile projectile : projectilesToRemove) {
+            projectiles.remove(projectile);
+        }
     }
 
     /**
@@ -197,7 +227,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     /**
      * spawnen und updaten der Gegner im Spiel
      */
-    public void spawnAndUpdateEnemies(){
+    public void spawnEnemies(){
         //Spawn enemies when ready
         if(Enemy.readyToSpawn() && enemies.size() < MAX_ENEMIES){
             switch(RandomGenerator.generateRandomInt()){
@@ -209,10 +239,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                     break;
             }
         }
-        //Update state of each enemy
-        for(Enemy enemy : enemies){
-            enemy.update();
-        }
     }
     private void processSensorData(float accelerationX) {
         player.moveSideways(accelerationX);
@@ -222,7 +248,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void registerSensorListener() {
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
-
 
 
     public void unregisterSensorListener() {
