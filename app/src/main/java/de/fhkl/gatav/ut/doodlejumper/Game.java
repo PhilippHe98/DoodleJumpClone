@@ -104,17 +104,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      */
     public void update() {
 
-        processSensorData(accelerationX);
-        player.update();
-        spawnEnemies();
-        updateProjectiles();
+        if(!isPaused) {
+            processSensorData(accelerationX);
+            player.update();
+            spawnEnemies();
+            updateProjectiles();
 
-        //Update state of each enemy
-        for(Enemy enemy : enemies){
-            enemy.update();
+            //Update state of each enemy
+            for (Enemy enemy : enemies) {
+                enemy.update();
+            }
+            handleProjectileCollisionWithEnemy();
+            checkGameOver();
         }
-        handleProjectileCollisionWithEnemy();
-        checkGameOver();
     }
 
     private void checkGameOver() {
@@ -201,16 +203,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
         return super.onTouchEvent(event);
     }
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            // Pausiere das Spiel, wenn der Zurück-Button der Handy-Taskleiste gedrückt wird
-            isPaused = !isPaused;
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     /**
      * kümmert sich um den SUrface des Bildschirms und startet den Game Loop
      * @param surfaceHolder
@@ -340,4 +332,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         // Keine Aktion erforderlich
     }
 
+    public boolean getIsPaused() {
+        return isPaused;
+    }
+
+    public void setIsPaused(boolean b) {
+        isPaused = b;
+    }
 }

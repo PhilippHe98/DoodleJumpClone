@@ -58,4 +58,17 @@ public class MainActivity extends Activity {
         super.onPause();
         game.unregisterSensorListener();
     }
+
+    @Override
+    public void onBackPressed() {
+        // Pausiere das Spiel, wenn der Zurück-Button der Handy-Taskleiste gedrückt wird
+        game.setIsPaused(!game.getIsPaused());
+        if (game.getIsPaused()) {
+            // Das Spiel ist pausiert
+            // Führe hier weitere Aktionen für die Pausierung des Spiels aus
+        } else {
+            // Das Spiel wird fortgesetzt
+            // Führe hier weitere Aktionen für die Fortsetzung des Spiels aus
+        }
+    }
 }
