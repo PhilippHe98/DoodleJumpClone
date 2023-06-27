@@ -2,11 +2,13 @@ package de.fhkl.gatav.ut.doodlejumper;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -56,6 +58,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      */
     private final GameLoop gameLoop;
     private ArrayList<PlatformWithPowerUp> platformsPowerUp = new ArrayList<PlatformWithPowerUp>();
+
+    private boolean isMainMenuVisible = true;
+    private boolean isPaused = false;
 
     /**
      * Konstruktor des GameObjects das alle Inhalte des Spiels initialisiert
@@ -122,37 +127,90 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     @Override
     public void draw(Canvas canvas) {
-
         super.draw(canvas);
-        drawUPS(canvas);
-        drawFPS(canvas);
-        player.draw(canvas);
-        for(Enemy enemy : enemies){
-            enemy.draw(canvas);
-        }
-        for (Platform platform: platforms) {
-            platform.draw(canvas);
-        }
-        for(Projectile projectile: projectiles) {
-            projectile.draw(canvas);
+        if(canvas != null){
+            // Spielinhalte auf den Canvas zeichnen
+            if (isPaused) {
+                drawPauseMenu(canvas);
+            } else if (isMainMenuVisible) {
+                drawMainMenu(canvas);
+            } else {
+                drawGameContent(canvas);
+            }
+            getHolder().unlockCanvasAndPost(canvas);
         }
     }
+
+        private void drawPauseMenu(Canvas canvas) {
+            // Hier kannst du das Pausemenü zeichnen
+            // Zum Beispiel: Text anzeigen
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
+            paint.setTextSize(60);
+            paint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText("Pause", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
+        }
+
+        private void drawMainMenu(Canvas canvas) {
+            // Hier kannst du das Hauptmenü zeichnen
+            // Zum Beispiel: Text anzeigen
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
+            paint.setTextSize(60);
+            paint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText("Hauptmenü", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
+        }
+
+        private void drawGameContent(Canvas canvas) {
+            super.draw(canvas);
+            drawUPS(canvas);
+            drawFPS(canvas);
+            player.draw(canvas);
+            for(Enemy enemy : enemies){
+                enemy.draw(canvas);
+            }
+            for (Platform platform: platforms) {
+                platform.draw(canvas);
+            }
+            for(Projectile projectile: projectiles) {
+                projectile.draw(canvas);
+            }
+        }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Handle touch event actions
-        switch(event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                Vector2D direction = new Vector2D(event.getX(),event.getY()).subtract(playerPosition);
-                direction.normalize();
-                System.out.println(direction);
-                Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20,20);
-                projectiles.add(projectile);
-                System.out.println("Feuer!");
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isMainMenuVisible) {
+                // Starte das Spiel, wenn der Bildschirm berührt wird und das Hauptmenü sichtbar ist
+                isMainMenuVisible = false;
+            } else {
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        // Schieße ein Projektil, wenn der Bildschirm berührt wird und das Spiel läuft
+                        Vector2D direction = new Vector2D(event.getX(),event.getY()).subtract(playerPosition);
+                        direction.normalize();
+                        System.out.println(direction);
+                        Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20,20);
+                        projectiles.add(projectile);
+                        System.out.println("Feuer!");
+                        break;
+                }
                 return true;
-
+            }
         }
         return super.onTouchEvent(event);
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // Pausiere das Spiel, wenn der Zurück-Button der Handy-Taskleiste gedrückt wird
+            isPaused = !isPaused;
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     /**
      * kümmert sich um den SUrface des Bildschirms und startet den Game Loop
      * @param surfaceHolder

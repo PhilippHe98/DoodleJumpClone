@@ -6,8 +6,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.Window;
 import android.view.WindowManager;
+
 
 /**
  * MainActivity is the entry point of out application
