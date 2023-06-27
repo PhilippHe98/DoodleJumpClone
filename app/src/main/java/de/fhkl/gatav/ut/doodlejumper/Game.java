@@ -104,7 +104,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      */
     public void update() {
 
-        if(!isPaused) {
+        if(!isPaused && !isMainMenuVisible) {
             processSensorData(accelerationX);
             player.update();
             spawnEnemies();
