@@ -15,6 +15,10 @@ abstract public class GameObject {
         this.position = position;
     }
 
+    public GameObject() {
+
+    }
+
     public static double distanceBetweenGameObjects(GameObject obj1, GameObject obj2) {
         return obj1.position.subtract(obj2.position).magnitude();
     }
@@ -30,7 +34,7 @@ abstract public class GameObject {
         return velocity;
     }
 
-    abstract void update();
+    protected abstract void update();
 
     abstract void draw(Canvas canvas);
 }

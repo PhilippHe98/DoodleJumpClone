@@ -18,7 +18,7 @@ public class hoveringEnemy extends Enemy {
     }
 
     @Override
-    void update() {
+    public void update() {
         position.add(velocity);
         calculateNewTopLeftAndBottomRight();
         if(position.x < 0) moveRight();
@@ -34,4 +34,8 @@ public class hoveringEnemy extends Enemy {
     }
 
 
+    @Override
+    public boolean isColliding(Rectangle other) {
+        return false;
+    }
 }

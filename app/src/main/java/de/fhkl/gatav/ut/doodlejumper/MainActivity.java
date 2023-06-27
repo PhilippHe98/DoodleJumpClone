@@ -35,6 +35,9 @@ public class MainActivity extends Activity {
         // Set content view to game, so that objects in the game class can be rendered to the screen
         game = new Game(this);
         setContentView(game);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+
     }
 
     /**

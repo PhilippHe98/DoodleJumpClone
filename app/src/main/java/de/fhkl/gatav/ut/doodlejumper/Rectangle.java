@@ -32,6 +32,10 @@ public abstract class Rectangle extends GameObject{
         calculateNewTopLeftAndBottomRight();
     }
 
+    public Rectangle() {
+        super();
+    }
+
     @Override
     public void draw(Canvas canvas) {
         canvas.drawRect((float)topLeft.x, (float) topLeft.y, (float) bottomRight.x,(float) bottomRight.y, paint);
@@ -55,4 +59,6 @@ public abstract class Rectangle extends GameObject{
 
         return rectF1.intersect(rectF2);
     }
+
+    public abstract boolean isColliding(Rectangle other);
 }

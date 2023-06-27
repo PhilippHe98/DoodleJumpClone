@@ -13,7 +13,12 @@ public class stationaryEnemy extends Enemy {
     }
 
     @Override
-    void update() {
+    public void update() {
 
+    }
+
+    @Override
+    public boolean isColliding(Rectangle other) {
+        return false;
     }
 }

@@ -19,7 +19,7 @@ public class Projectile extends Rectangle {
     }
 
     @Override
-    void update() {
+    public void update() {
         position.add(velocity);
         calculateNewTopLeftAndBottomRight();
     }
@@ -28,5 +28,10 @@ public class Projectile extends Rectangle {
             // der radius ist die breite des Rechtecks durch 2 (Rechteck soll hier ein Quadrat sein
             float radius = (float) (width/2);
             canvas.drawCircle((float)position.x,(float)position.y,(float)radius, paint);
+    }
+
+    @Override
+    public boolean isColliding(Rectangle other) {
+        return false;
     }
 }

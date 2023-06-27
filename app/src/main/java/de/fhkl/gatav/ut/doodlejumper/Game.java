@@ -55,6 +55,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      * Erstellen eines GameLoop Objects
      */
     private final GameLoop gameLoop;
+    private ArrayList<PlatformWithPowerUp> platformsPowerUp = new ArrayList<PlatformWithPowerUp>();
 
     /**
      * Konstruktor des GameObjects das alle Inhalte des Spiels initialisiert
@@ -75,6 +76,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
         //Init Player
         player = new Player(getContext(), playerPosition, 100,100);
+
+
 
         // Init one Platform
         Platform platform1 = new Platform(getContext(), new Vector2D(200,1800), 200, 50);
@@ -184,6 +187,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for(Projectile projectile : projectilesToRemove) {
             projectiles.remove(projectile);
         }
+//        PlatformWithPowerUp platform = null;
+//        platform.selectPowerUp(platformsPowerUp);
+//        for (int i = 0; i < platformsPowerUp.size(); i++) {
+//            PlatformWithPowerUp p = platformsPowerUp.get(i);
+//            p.draw(canvas);
+//        }
     }
 
     /**
