@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -39,7 +40,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     /**
      * festlegen der Startposition des Spielers, dabei werden x und y in der Update Methode überschrieben
      */
-    private final Vector2D playerStartPosition = new Vector2D(500,1000);
+    private final Vector2D playerStartPosition = new Vector2D(500,1500);
     Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
     /**
      * Listen die Plattformen und Gegner während des Spiels halten
@@ -115,7 +116,26 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 enemy.update();
             }
             handleProjectileCollisionWithEnemy();
+            spawnPlatforms();
+            updatePlatforms();
             checkGameOver();
+        }
+    }
+
+    private void spawnPlatforms() {
+        double random = Math.random() * 1000;
+        Vector2D spawnPos = new Vector2D(random,-200);
+        platforms.add(new Platform(getContext(), spawnPos,200,50));
+    }
+
+    private void updatePlatforms() {
+        if(player.getPosition().y <= 1000) {
+            Platform.setMoveDown(true);
+        } else {
+            Platform.setMoveDown(false);
+        }
+        for (Platform platform: platforms) {
+            platform.update();
         }
     }
 
