@@ -1,7 +1,10 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
+import static de.fhkl.gatav.ut.doodlejumper.Game.context;
+
 import android.content.Context;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 
 import androidx.core.content.ContextCompat;
 
@@ -15,6 +18,7 @@ public class Player extends Rectangle {
     private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
     private static final double SIDE_MOVE_SPEED = 300.0 / GameLoop.MAX_UPS;
 
+    MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
     private boolean isJumping = false;
     private double gravityValue = 0.6;
     private double jumpForce = 28;
@@ -54,6 +58,7 @@ public class Player extends Rectangle {
             if (isColliding(this, platform)) {
                 if(this.bottomRight.y > platform.topLeft.y)
                     if (!isJumping) velocity.y = -jumpForce;
+                    mediaPlayer.start();
             }
         }
         velocity.y += gravityValue;

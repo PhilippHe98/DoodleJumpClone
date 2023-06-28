@@ -64,6 +64,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     private boolean isMainMenuVisible = true;
     private boolean isPaused = false;
+    protected static Context context;
 
     /**
      * Konstruktor des GameObjects das alle Inhalte des Spiels initialisiert
@@ -71,6 +72,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
      */
     public Game(Context context) {
         super(context);
+        this.context = context;
 
         //Init SensorManager
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -226,9 +228,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             // Zum Beispiel: Text anzeigen
             Paint paint = new Paint();
             paint.setColor(Color.WHITE);
-            paint.setTextSize(60);
+            paint.setTextSize(90);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("Pause", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
+            canvas.drawText("Pause", canvas.getWidth() / 2f, canvas.getHeight() / 7f, paint);
         }
 
         private void drawMainMenu(Canvas canvas) {
@@ -236,9 +238,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             // Zum Beispiel: Text anzeigen
             Paint paint = new Paint();
             paint.setColor(Color.WHITE);
-            paint.setTextSize(60);
+            paint.setTextSize(90);
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("Hauptmenü", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
+            canvas.drawText("Jumping John", canvas.getWidth() / 2f, canvas.getHeight() / 7f, paint);
+
+            Paint paint2 = new Paint();
+            paint2.setColor(Color.WHITE);
+            paint2.setTextSize(60);
+            paint2.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText("TAP TO PLAY", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint2);
         }
 
         private void drawGameContent(Canvas canvas) {
