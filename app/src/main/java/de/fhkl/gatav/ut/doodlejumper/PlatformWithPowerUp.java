@@ -2,6 +2,7 @@ package de.fhkl.gatav.ut.doodlejumper;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,13 +16,17 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class PlatformWithPowerUp extends Rectangle{
 
+//    private final List currentPlatform;
     private double x;
     private double y;
     double platformX;
     double platformY;
+//    ArrayList platforms = new ArrayList<PlatformWithPowerUp>();
 
     public PlatformWithPowerUp(Context context, Vector2D position, double width, double height) {
         super();
+//        currentPlatform = selectPowerUp(platforms);
+
     }
 
     public List<PlatformWithPowerUp> selectPowerUp(List<PlatformWithPowerUp> platformwPU){

@@ -49,7 +49,7 @@ public class GameLoop extends Thread {
                     game.drawUPS(canvas);
                     game.drawFPS(canvas);
                 }
-            } catch(IllegalArgumentException e) {
+            } catch(SurfaceHolder.BadSurfaceTypeException e) {
                 e.printStackTrace();
             } finally {
                 if(canvas != null) {

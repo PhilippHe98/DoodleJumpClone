@@ -159,6 +159,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                     platforms.add(new Platform(getContext(), spawnPos, 200, 50));
                     break;
 //                case 2:
+//                    platformsPowerUp.add(new PlatformWithPowerUp(getContext(),new Vector2D(Math.random() * 1000, -200), 200, 50));
 //                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
 //                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
 //                    break;

@@ -2,11 +2,16 @@ package de.fhkl.gatav.ut.doodlejumper;
 
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 
 /**
@@ -15,6 +20,7 @@ import android.view.WindowManager;
 public class MainActivity extends Activity {
 
     private Game game;
+    public static Bitmap background;
 
     /**
      * Erstellen von SensorManager Objekt, Sensor Objekt und SensorEventListener Objekt
@@ -33,10 +39,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // Set content view to game, so that objects in the game class can be rendered to the screen
+        //Äquivalent zu GameView Klassen wie aus Tutorials bekannt
         game = new Game(this);
         setContentView(game);
+        background = BitmapFactory.decodeResource(getResources(), R.id.background);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 
     }
 
@@ -71,4 +78,5 @@ public class MainActivity extends Activity {
             // Führe hier weitere Aktionen für die Fortsetzung des Spiels aus
         }
     }
+
 }

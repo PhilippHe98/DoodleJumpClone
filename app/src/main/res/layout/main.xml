@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFFFF"
+    android:gravity="bottom|center_horizontal"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/jwView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:src="@drawable/jw_normal"
+        android:visibility="visible"
+        android:contentDescription="Hauptcharakter stehend, Ausgangsposition"/>
+    <ImageView
+        android:id="@+id/jwJump"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/jw_jumping"
+        android:contentDescription="Hauptcharakter soringend"/>
+    <ImageView
+        android:id="@+id/jwKO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/jw_k_o"
+        android:contentDescription="Hauptcharakter K.O."/>
+    <ImageView
+        android:id="@+id/jwshootleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/waffe_links_nicht_springend"
+        android:contentDescription="Hauptcharakter mit Schusswaffe links"/>
+    <ImageView
+        android:id="@+id/jwshootandjumpleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/waffe_links_springend"
+        android:contentDescription="Hauptcharakter springend mit Schusswaffe links"/>
+    <ImageView
+        android:id="@+id/jwshootright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/waffe_rechts_nicht_springend"
+        android:contentDescription="Hauptcharakter mit Schusswaffe rechts"/>
+    <ImageView
+        android:id="@+id/jwshootandjumpright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/waffe_rechts_springend"
+        android:contentDescription="Hauptcharakter springend mit Schusswaffe nach rechts"/>
+    <ImageView
+        android:id="@+id/enemy1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/enemy1"
+        android:contentDescription="Gegnercharakter"/>
+    <ImageView
+        android:id="@+id/enemy2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="invisible"
+        android:src="@drawable/enemy2"
+        android:contentDescription="Gegnercharakter"/>
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="bottom|center_horizontal"
+        android:visibility="visible"
+        android:src="@drawable/background"
+        android:contentDescription="Hintergrund"/>
+
+</RelativeLayout>

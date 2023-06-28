@@ -20,8 +20,8 @@ public class Player extends Rectangle {
 
     MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
     private boolean isJumping = false;
-    private double gravityValue = 0.6;
-    private double jumpForce = 28;
+    private double gravityValue = 0.5;
+    private double jumpForce = 26;
 
     /**
      * Standardkonstruktor
