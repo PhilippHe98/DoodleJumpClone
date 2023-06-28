@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -32,6 +33,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     /**
      * legt die max. Anzahl an Gegner die auf dem Bildschirm zu sehen sind fest
      */
+    private static final int MAX_PLATTFORMS_PER_SPAWN = 3;
     private static final int MAX_ENEMIES = 5;
     /**
      * erstellen eines Player Objects
@@ -89,9 +91,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         Platform platform1 = new Platform(getContext(), new Vector2D(200,1800), 200, 50);
         Platform platform2 = new Platform(getContext(), new Vector2D(500,1600), 200, 50);
         Platform platform3 = new Platform(getContext(), new Vector2D(700,2000), 200, 50);
+        Platform platform4 = new Platform(getContext(), new Vector2D(500, 1000), 200,50);
+        Platform platform5 = new Platform(getContext(), new Vector2D(500, 600), 200,50);
+        Platform platform6 = new Platform(getContext(), new Vector2D(900, 400), 200,50);
+        Platform platform7 = new Platform(getContext(), new Vector2D(300, 100), 200,50);
+
+
         platforms.add(platform1);
         platforms.add(platform2);
         platforms.add(platform3);
+        platforms.add(platform4);
+        platforms.add(platform5);
+        platforms.add(platform6);
+        platforms.add(platform7);
 
         Enemy enemie1 = new stationaryEnemy(getContext(), new Vector2D(300,300), 100,100);
         Enemy enemie2 = new stationaryEnemy(getContext(), new Vector2D(700,300), 100,100);
@@ -123,19 +135,51 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     }
 
     private void spawnPlatforms() {
-        double random = Math.random() * 1000;
-        Vector2D spawnPos = new Vector2D(random,-200);
-        platforms.add(new Platform(getContext(), spawnPos,200,50));
+        int randomNum = ThreadLocalRandom.current().nextInt(1, 4 + 1);
+
+        if (Platform.readyToSpawn()) {
+            switch (randomNum) {
+                case 1:
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    break;
+                case 2:
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    break;
+                case 3:
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    break;
+                case 4:
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private void updatePlatforms() {
-        if(player.getPosition().y <= 1000) {
+        ArrayList<Platform> platformsToRemove = new ArrayList<>();
+
+        if(player.getPosition().y <= 1300) {
             Platform.setMoveDown(true);
         } else {
             Platform.setMoveDown(false);
         }
         for (Platform platform: platforms) {
             platform.update();
+            //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
+            if(platform.position.y > 2000) {
+                platformsToRemove.add(platform);
+            }
+        }
+        for(Platform platform : platformsToRemove) {
+            platforms.remove(platform);
         }
     }
 

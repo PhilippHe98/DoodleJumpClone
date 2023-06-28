@@ -29,9 +29,4 @@ public class Projectile extends Rectangle {
             float radius = (float) (width/2);
             canvas.drawCircle((float)position.x,(float)position.y,(float)radius, paint);
     }
-
-    @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
-    }
 }

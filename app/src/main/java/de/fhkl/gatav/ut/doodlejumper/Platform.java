@@ -14,8 +14,11 @@ Einheitliche Göße der Plattformen ist festegelegt als: Höhe: 30 Pixel und Bre
  */
 public class Platform extends Rectangle {
 
-    private static final double VERTICA_SPEED = 800.0 / GameLoop.MAX_UPS;
+    private static final double VERTICA_SPEED = 1000.0 / GameLoop.MAX_UPS;
     private static boolean moveDown;
+
+    private static final double UPDATES_PER_SPAWN = 30;
+    private static double updatesUntilNextSpawn = UPDATES_PER_SPAWN;
 
     public Platform(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.plattform));
@@ -57,7 +60,6 @@ public class Platform extends Rectangle {
     public void update(){
         if(moveDown) velocity.set(velocity.x, VERTICA_SPEED);
         if(!moveDown) velocity.set(velocity.x, 0);
-        System.out.println("plattform veloctiy: " +velocity);
        position.add(velocity);
        calculateNewTopLeftAndBottomRight();
     }
@@ -66,10 +68,16 @@ public class Platform extends Rectangle {
         moveDown = b;
     }
 
-    @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
+    public static boolean readyToSpawn(){
+        if(updatesUntilNextSpawn <= 0){
+            updatesUntilNextSpawn += UPDATES_PER_SPAWN;
+            return true;
+        }else {
+            updatesUntilNextSpawn--;
+            return false;
+        }
     }
+
 }
 
 

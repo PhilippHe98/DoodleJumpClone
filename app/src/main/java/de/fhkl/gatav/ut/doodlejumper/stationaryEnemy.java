@@ -17,8 +17,4 @@ public class stationaryEnemy extends Enemy {
 
     }
 
-    @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
-    }
 }

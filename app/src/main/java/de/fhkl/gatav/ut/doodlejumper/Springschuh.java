@@ -39,7 +39,6 @@ public class Springschuh extends Rectangle{
 
     }
 
-    @Override
     public boolean isColliding(Rectangle other) {
         return false;
     }

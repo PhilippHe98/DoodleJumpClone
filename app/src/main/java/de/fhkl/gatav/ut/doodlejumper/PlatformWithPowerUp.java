@@ -163,11 +163,5 @@ public class PlatformWithPowerUp extends Rectangle{
     protected void update() {
 
     }
-
-    @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
-    }
-
 }
 

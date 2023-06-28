@@ -80,8 +80,6 @@ public class PowerUp extends Rectangle {
     );
 
     }
-
-    @Override
     public boolean isColliding(Rectangle other){
         /*
         Die Kanten der beiden Rechtecke speichern um sie mit einer If Anfrage zu überprüfen

@@ -41,15 +41,18 @@ public class Player extends Rectangle {
         if (position.x < -50) position.set(1050, position.y);
         if (position.x > 1050) position.set(-50, position.y);
 
-        //Nur für Testzwecke, Resettet den Spieler
-        if (position.y > 2100) position.set(position.x, 500);
+        if(position.y < 1000) position.set(position.x, 1000);
 
-        if (velocity.y >= 0) isJumping = false;
-        if (velocity.y < 0) isJumping = true;
+        //Nur für Testzwecke, Resettet den Spieler
+//        if (position.y > 2100) position.set(position.x, 500);
+
+        if (velocity.y > 0) isJumping = false;
+        if (velocity.y <= 0) isJumping = true;
 
         // Kollisionen resetten den Jump Timer
-        for (Rectangle rect : Game.platforms) {
-            if (this.isColliding(rect)) {
+        for (Platform platform : Game.platforms) {
+         if((this.bottomRight.y > platform.topLeft.y))
+            if (isColliding(this, platform)) {
                 if (!isJumping) velocity.y = -jumpForce;
             }
         }
@@ -62,25 +65,6 @@ public class Player extends Rectangle {
         // berechnen der neuen Maße des Rechtecks
         calculateNewTopLeftAndBottomRight();
     }
-
-    // Kollisionserkennung
-    public boolean isColliding(Rectangle other) {
-        // Danke ChatGPT :)
-        RectF thisRectF = this.getBounds();
-        RectF otherRectF = other.getBounds();
-        System.out.println(other.getClass());
-
-        // Überprüfe, ob der Spieler von unten auf die Plattform trifft
-        boolean isPlayerAbovePlatform = (this.bottomRight.y < other.topLeft.y);
-
-        // Kollisionüberprüfung erfolg nur, wenn der Spieler oberhalb der Plattform ist.
-        if (!isPlayerAbovePlatform) {
-            return thisRectF.intersect(otherRectF);
-        }
-
-        return false; // Kollision ignorieren, wenn der Spieler von unten auf die Plattform trifft
-    }
-
     /**
      * Methode um den Spieler nach rechts bzw. links zu bewegen
      */

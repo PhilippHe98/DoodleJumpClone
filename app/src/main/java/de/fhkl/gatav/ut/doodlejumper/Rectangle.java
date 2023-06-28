@@ -59,6 +59,4 @@ public abstract class Rectangle extends GameObject{
 
         return rectF1.intersect(rectF2);
     }
-
-    public abstract boolean isColliding(Rectangle other);
 }

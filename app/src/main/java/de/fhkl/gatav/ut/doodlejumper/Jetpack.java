@@ -53,7 +53,6 @@ public class Jetpack extends Rectangle{
         playerY = playerY + 200;
     }
 
-    @Override
     public boolean isColliding(Rectangle other) {
         return false;
     }

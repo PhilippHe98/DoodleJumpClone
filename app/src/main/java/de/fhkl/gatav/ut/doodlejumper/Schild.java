@@ -33,7 +33,7 @@ public class Schild extends Rectangle{
     }
     @Override
     public void update() {
-        if(isColliding(player)){
+        if(Rectangle.isColliding(this, player)){
             player.setPosition(newPosition);
         }
 
@@ -43,7 +43,7 @@ public class Schild extends Rectangle{
          * Deaktivieren der Kollisionserkennung bei Gegnern
          */
         boolean hitbyEnemy = false;
-        if(player.isColliding(enemy)){
+        if(isColliding(this, enemy)){
             hitbyEnemy = true;
         }else{
             hitbyEnemy = false;
@@ -57,10 +57,5 @@ public class Schild extends Rectangle{
              * Kollision anerkennen
              */
         }
-    }
-
-    @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
     }
 }

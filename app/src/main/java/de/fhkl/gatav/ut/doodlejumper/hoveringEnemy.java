@@ -33,8 +33,6 @@ public class hoveringEnemy extends Enemy {
         velocity.set(-PIXEL_PER_UPDATE, 0);
     }
 
-
-    @Override
     public boolean isColliding(Rectangle other) {
         return false;
     }

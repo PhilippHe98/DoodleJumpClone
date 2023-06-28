@@ -42,8 +42,6 @@ public class JumpBooster extends Rectangle {
         }
 
     }
-
-    @Override
     public boolean isColliding(Rectangle other) {
         return false;
     }

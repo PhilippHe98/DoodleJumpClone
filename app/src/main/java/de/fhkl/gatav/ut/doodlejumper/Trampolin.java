@@ -11,10 +11,6 @@ public class Trampolin extends Rectangle{
     }
 
     @Override
-    public boolean isColliding(Rectangle other) {
-        return false;
-    }
-    @Override
     public void update(){
 
     }
