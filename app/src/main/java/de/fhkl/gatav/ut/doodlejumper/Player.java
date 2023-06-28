@@ -41,7 +41,7 @@ public class Player extends Rectangle {
         if (position.x < -50) position.set(1050, position.y);
         if (position.x > 1050) position.set(-50, position.y);
 
-        if(position.y < 1000) position.set(position.x, 1000);
+        if(position.y < 1300) position.set(position.x, 1300);
 
         //Nur für Testzwecke, Resettet den Spieler
 //        if (position.y > 2100) position.set(position.x, 500);
@@ -51,9 +51,9 @@ public class Player extends Rectangle {
 
         // Kollisionen resetten den Jump Timer
         for (Platform platform : Game.platforms) {
-         if((this.bottomRight.y > platform.topLeft.y))
             if (isColliding(this, platform)) {
-                if (!isJumping) velocity.y = -jumpForce;
+                if(this.bottomRight.y > platform.topLeft.y)
+                    if (!isJumping) velocity.y = -jumpForce;
             }
         }
         velocity.y += gravityValue;

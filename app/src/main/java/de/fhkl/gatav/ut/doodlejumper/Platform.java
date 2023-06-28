@@ -17,14 +17,14 @@ public class Platform extends Rectangle {
     private static final double VERTICA_SPEED = 1000.0 / GameLoop.MAX_UPS;
     private static boolean moveDown;
 
-    private static final double UPDATES_PER_SPAWN = 30;
+    private static final double UPDATES_PER_SPAWN = 40;
     private static double updatesUntilNextSpawn = UPDATES_PER_SPAWN;
 
     public Platform(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.plattform));
         velocity = new Vector2D();
     }
-    public double pointOnScreen(Context context){
+    public double pointOnScreen(Context context) {
         /*
         Methode sucht zufälligen Punkt auf dem Bildschirm
         point -> immer int left eines Rechtecks

@@ -134,29 +134,43 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
     }
 
+    private boolean checkSpawnPosition(Vector2D pos) {
+        for (Platform platform: platforms) {
+            if(pos.y == platform.getPosition().y) {
+                if(!(pos.x > platform.getPosition().x +150)||!(pos.x > platform.getPosition().x -150));
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void spawnPlatforms() {
-        int randomNum = ThreadLocalRandom.current().nextInt(1, 4 + 1);
+        int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
+        Vector2D spawnPos;
+        randomNum = 1;
 
         if (Platform.readyToSpawn()) {
             switch (randomNum) {
                 case 1:
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+                    spawnPos = new Vector2D(Math.random()*1000,-200);
+                    if(checkSpawnPosition(spawnPos))
+                    platforms.add(new Platform(getContext(), spawnPos, 200, 50));
                     break;
-                case 2:
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    break;
-                case 3:
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    break;
-                case 4:
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-                    break;
+//                case 2:
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    break;
+//                case 3:
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    break;
+//                case 4:
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
+//                    break;
                 default:
                     break;
             }
@@ -174,7 +188,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for (Platform platform: platforms) {
             platform.update();
             //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
-            if(platform.position.y > 2000) {
+            if(platform.position.y > 2500) {
                 platformsToRemove.add(platform);
             }
         }
