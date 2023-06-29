@@ -8,7 +8,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,9 +18,16 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
+//import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.PlatformWithPowerUp;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Projectile;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.stationaryEnemy;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.hoveringEnemy;
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
@@ -29,24 +35,14 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
  * Hauptklasse der App die das Game und dessen Inhalte verwaltet
  */
 public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
-
-    /**
-     * legt die max. Anzahl an Gegner die auf dem Bildschirm zu sehen sind fest
-     */
-    private static final int MAX_PLATTFORMS_PER_SPAWN = 3;
-    private static final int MAX_ENEMIES = 5;
-    /**
-     * erstellen eines Player Objects
-     */
     private final Player player;
     /**
      * festlegen der Startposition des Spielers, dabei werden x und y in der Update Methode überschrieben
      */
     private final Vector2D playerStartPosition = new Vector2D(500,1500);
     Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
-    /**
-     * Listen die Plattformen und Gegner während des Spiels halten
-     */
+
+
     public static ArrayList<Platform> platforms = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Projectile> projectiles = new ArrayList<>();
@@ -56,20 +52,17 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private SensorManager sensorManager;
     private Sensor accelerometer;   //Deutsch: Beschleunigungsmesser
     private float accelerationX;
-    /**
-     * Erstellen eines GameLoop Objects
-     */
+
+    private SpawnManager spawnManager;
+
     private final GameLoop gameLoop;
-    private ArrayList<PlatformWithPowerUp> platformsPowerUp = new ArrayList<PlatformWithPowerUp>();
+//    private ArrayList<PlatformWithPowerUp> platformsPowerUp = new ArrayList<PlatformWithPowerUp>();
 
     private boolean isMainMenuVisible = true;
     private boolean isPaused = false;
     protected static Context context;
 
-    /**
-     * Konstruktor des GameObjects das alle Inhalte des Spiels initialisiert
-     * @param context
-     */
+
     public Game(Context context) {
         super(context);
         this.context = context;
@@ -87,7 +80,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         //Init Player
         player = new Player(getContext(), playerPosition, 100,100);
 
-
+        spawnManager = new SpawnManager(getContext());
 
         // Init one Platform
         Platform platform1 = new Platform(getContext(), new Vector2D(200,1800), 200, 50);
@@ -122,92 +115,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         if(!isPaused && !isMainMenuVisible) {
             processSensorData(accelerationX);
             player.update();
-            spawnEnemies();
+            spawnManager.update();
             updateProjectiles();
+            updatePlatforms();
 
-            //Update state of each enemy
             for (Enemy enemy : enemies) {
                 enemy.update();
             }
             handleProjectileCollisionWithEnemy();
-            spawnPlatforms();
-            updatePlatforms();
+
             checkGameOver();
+
         }
     }
-
-    private boolean checkSpawnPosition(Vector2D pos) {
-        for (Platform platform: platforms) {
-            if(pos.y == platform.getPosition().y) {
-                if(!(pos.x > platform.getPosition().x +150)||!(pos.x > platform.getPosition().x -150));
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void spawnPlatforms() {
-        int randomNum = ThreadLocalRandom.current().nextInt(1, 3 + 1);
-        Vector2D spawnPos;
-        randomNum = 1;
-
-        if (Platform.readyToSpawn()) {
-            switch (randomNum) {
-                case 1:
-                    spawnPos = new Vector2D(Math.random()*1000,-200);
-                    if(checkSpawnPosition(spawnPos))
-                    platforms.add(new Platform(getContext(), spawnPos, 200, 50));
-                    break;
-//                case 2:
-//                    platformsPowerUp.add(new PlatformWithPowerUp(getContext(),new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    break;
-//                case 3:
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    break;
-//                case 4:
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    platforms.add(new Platform(getContext(), new Vector2D(Math.random() * 1000, -200), 200, 50));
-//                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    private void updatePlatforms() {
-        ArrayList<Platform> platformsToRemove = new ArrayList<>();
-
-        if(player.getPosition().y <= 1300) {
-            Platform.setMoveDown(true);
-        } else {
-            Platform.setMoveDown(false);
-        }
-        for (Platform platform: platforms) {
-            platform.update();
-            //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
-            if(platform.position.y > 2500) {
-                platformsToRemove.add(platform);
-            }
-        }
-        for(Platform platform : platformsToRemove) {
-            platforms.remove(platform);
-        }
-    }
-
-    private void checkGameOver() {
-        for (Enemy enemy: enemies) {
-            if(Rectangle.isColliding(player,enemy)) {
-                System.out.println("Game over");
-            }
-        }
-    }
-
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -224,15 +144,44 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
     }
 
-        private void drawPauseMenu(Canvas canvas) {
-            // Hier kannst du das Pausemenü zeichnen
-            // Zum Beispiel: Text anzeigen
-            Paint paint = new Paint();
-            paint.setColor(Color.WHITE);
-            paint.setTextSize(90);
-            paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("Pause", canvas.getWidth() / 2f, canvas.getHeight() / 7f, paint);
+
+    private void updatePlatforms() {
+        ArrayList<Platform> platformsToRemove = new ArrayList<>();
+
+        if(player.getPosition().y <= 1300) {
+            Platform.setMoveDown(true);
+        } else {
+            Platform.setMoveDown(false);
         }
+        for (Platform platform: platforms) {
+            platform.update();
+            //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
+            if(platform.getPosition().y > 2500) {
+                platformsToRemove.add(platform);
+            }
+        }
+        for(Platform platform : platformsToRemove) {
+            platforms.remove(platform);
+        }
+    }
+
+    private void checkGameOver() {
+        for (Enemy enemy: enemies) {
+            if(Rectangle.isColliding(player,enemy)) {
+                System.out.println("Game over");
+            }
+        }
+    }
+
+    private void drawPauseMenu(Canvas canvas) {
+        // Hier kannst du das Pausemenü zeichnen
+        // Zum Beispiel: Text anzeigen
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(90);
+        paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("Pause", canvas.getWidth() / 2f, canvas.getHeight() / 7f, paint);
+    }
 
         private void drawMainMenu(Canvas canvas) {
             // Hier kannst du das Hauptmenü zeichnen
@@ -324,14 +273,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for(Projectile projectile : projectilesToRemove) {
             projectiles.remove(projectile);
         }
-//        PlatformWithPowerUp platform = null;
-//        platform.selectPowerUp(platformsPowerUp);
-//        for (int i = 0; i < platformsPowerUp.size(); i++) {
-//            PlatformWithPowerUp p = platformsPowerUp.get(i);
-//            p.draw(canvas);
-//        }
     }
-
     /**
      * brechnet die Updates Per Second und zeichnet diese auf den Bildschirm
      * @param canvas
@@ -373,19 +315,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     /**
      * spawnen und updaten der Gegner im Spiel
      */
-    public void spawnEnemies(){
-        //Spawn enemies when ready
-        if(Enemy.readyToSpawn() && enemies.size() < MAX_ENEMIES){
-            switch(RandomGenerator.generateRandomInt()){
-                case 1 :
-                    enemies.add(new stationaryEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
-                    break;
-                case 2 :
-                    enemies.add(new hoveringEnemy(getContext(),new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
-                    break;
-            }
-        }
-    }
     private void processSensorData(float accelerationX) {
         player.moveSideways(accelerationX);
     }

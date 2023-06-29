@@ -1,11 +1,10 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp;
 
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
-public class Trampolin extends Rectangle{
-    private double x;
-    private double y;
-
+public class Trampolin extends Rectangle {
     public Trampolin() {
         super();
     }
@@ -13,10 +12,6 @@ public class Trampolin extends Rectangle{
     @Override
     public void update(){
 
-    }
-    public void set(double x, double y) {
-        this.x = x;
-        this.y = y;
     }
     public void used(Player player){
         Vector2D position = player.getPosition();

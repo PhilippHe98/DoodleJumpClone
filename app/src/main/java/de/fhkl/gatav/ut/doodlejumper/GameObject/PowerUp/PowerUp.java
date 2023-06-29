@@ -1,12 +1,15 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp;
 
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.RectF;
 
 import androidx.core.content.ContextCompat;
+
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
+import de.fhkl.gatav.ut.doodlejumper.R;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 
 
 /*
@@ -80,19 +83,19 @@ public class PowerUp extends Rectangle {
     );
 
     }
-    public boolean isColliding(Rectangle other){
-        /*
-        Die Kanten der beiden Rechtecke speichern um sie mit einer If Anfrage zu überprüfen
-        wie bei Player und Plattform
-         */
-        RectF RectJet = this.getBounds();
-        RectF RectPlay = other.getBounds();
-        boolean isPlayerHittingPowerUp = (this.bottomRight.y < other.topLeft.y);
-        if(!isPlayerHittingPowerUp){
-            return RectJet.intersect(RectPlay);
-        }
-        return false;
-    }
+//    public boolean isColliding(Rectangle other){
+//        /*
+//        Die Kanten der beiden Rechtecke speichern um sie mit einer If Anfrage zu überprüfen
+//        wie bei Player und Plattform
+//         */
+//        RectF RectJet = this.getBounds();
+//        RectF RectPlay = other.getBounds();
+//        boolean isPlayerHittingPowerUp = (this.bottomRight.y < other.topLeft.y);
+//        if(!isPlayerHittingPowerUp){
+//            return RectJet.intersect(RectPlay);
+//        }
+//        return false;
+//    }
 
     /*
     Prüfen ob unter dem PowerUp eine Plattform existiert auf die man es drawen kann

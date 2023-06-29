@@ -1,13 +1,14 @@
-package de.fhkl.gatav.ut.doodlejumper;
-
-import static de.fhkl.gatav.ut.doodlejumper.Game.context;
+package de.fhkl.gatav.ut.doodlejumper.GameObject;
 
 import android.content.Context;
-import android.graphics.RectF;
 import android.media.MediaPlayer;
 
 import androidx.core.content.ContextCompat;
 
+import de.fhkl.gatav.ut.doodlejumper.Game;
+import de.fhkl.gatav.ut.doodlejumper.GameLoop;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
+import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 /**
@@ -18,10 +19,12 @@ public class Player extends Rectangle {
     private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
     private static final double SIDE_MOVE_SPEED = 300.0 / GameLoop.MAX_UPS;
 
-    MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
+
     private boolean isJumping = false;
-    private double gravityValue = 0.5;
-    private double jumpForce = 26;
+    private double gravityValue = 0.8;
+    private double jumpForce = 35;
+
+    MediaPlayer mediaPlayer;
 
     /**
      * Standardkonstruktor
@@ -34,6 +37,7 @@ public class Player extends Rectangle {
     public Player(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.magenta));
         velocity = new Vector2D(0, MAX_SPEED);
+        mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
     }
 
     /**
@@ -56,9 +60,12 @@ public class Player extends Rectangle {
         // Kollisionen resetten den Jump Timer
         for (Platform platform : Game.platforms) {
             if (isColliding(this, platform)) {
-                if(this.bottomRight.y > platform.topLeft.y)
-                    if (!isJumping) velocity.y = -jumpForce;
-                    mediaPlayer.start();
+                if(this.bottomRight.y > platform.topLeft.y) {
+                    if (!isJumping) {
+                        velocity.y = -jumpForce;
+                        mediaPlayer.start();
+                    }
+                }
             }
         }
         velocity.y += gravityValue;

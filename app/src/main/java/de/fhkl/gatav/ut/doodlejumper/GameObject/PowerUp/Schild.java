@@ -1,11 +1,14 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp;
 
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 /*
 Ein Buff der den Spieler kurze Zeit unverwundbar macht wenn er ihn einsammelt
  */
-public class Schild extends Rectangle{
+public class Schild extends Rectangle {
     Player player;
     static Vector2D newPosition = new Vector2D(500, 500);
     private int duration; // Dauer des Power-Ups in Sekunden

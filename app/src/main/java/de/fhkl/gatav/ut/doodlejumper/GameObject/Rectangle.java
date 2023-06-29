@@ -1,17 +1,13 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
-
-import androidx.core.content.ContextCompat;
 
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 //Abstrakte Klasse
-public abstract class Rectangle extends GameObject{
+public abstract class Rectangle extends GameObject {
 
     protected Vector2D topLeft; // topleft.x ist left, topleft.y ist top
     protected Vector2D bottomRight; // bottomright.x ist right, bottomright.y ist bottom

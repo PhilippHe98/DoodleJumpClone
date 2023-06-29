@@ -1,4 +1,4 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject.Platform;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -6,6 +6,9 @@ import android.view.WindowManager;
 
 import androidx.core.content.ContextCompat;
 
+import de.fhkl.gatav.ut.doodlejumper.GameLoop;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
+import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 /*
@@ -16,9 +19,6 @@ public class Platform extends Rectangle {
 
     private static final double VERTICA_SPEED = 1000.0 / GameLoop.MAX_UPS;
     private static boolean moveDown;
-
-    private static final double UPDATES_PER_SPAWN = 40;
-    private static double updatesUntilNextSpawn = UPDATES_PER_SPAWN;
 
     public Platform(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.plattform));
@@ -66,16 +66,6 @@ public class Platform extends Rectangle {
 
     public static void setMoveDown(boolean b) {
         moveDown = b;
-    }
-
-    public static boolean readyToSpawn(){
-        if(updatesUntilNextSpawn <= 0){
-            updatesUntilNextSpawn += UPDATES_PER_SPAWN;
-            return true;
-        }else {
-            updatesUntilNextSpawn--;
-            return false;
-        }
     }
 
 }

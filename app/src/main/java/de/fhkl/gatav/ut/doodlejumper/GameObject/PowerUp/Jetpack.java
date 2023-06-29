@@ -1,17 +1,14 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp;
 
-import android.graphics.RectF;
-
-import de.fhkl.gatav.ut.doodlejumper.Player;
-import de.fhkl.gatav.ut.doodlejumper.PowerUp;
-import de.fhkl.gatav.ut.doodlejumper.Rectangle;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 /**
 Power Up mit dem der Spielercharakter kurze Zeit senkrecht an Plattformen
  vorbeifliegen kann jedoch weiterhin verwundbar ist
  **/
-public class Jetpack extends Rectangle{
+public class Jetpack extends Rectangle {
 
     Player player;
     static Vector2D newPosition = new Vector2D(500, 500);

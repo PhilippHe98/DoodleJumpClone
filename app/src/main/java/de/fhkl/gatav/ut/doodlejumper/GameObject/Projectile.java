@@ -1,11 +1,11 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.RectF;
 
 import androidx.core.content.ContextCompat;
 
+import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class Projectile extends Rectangle {

@@ -1,7 +1,6 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
@@ -34,7 +33,7 @@ abstract public class GameObject {
         return velocity;
     }
 
-    protected abstract void update();
+    public abstract void update();
 
     abstract void draw(Canvas canvas);
 }

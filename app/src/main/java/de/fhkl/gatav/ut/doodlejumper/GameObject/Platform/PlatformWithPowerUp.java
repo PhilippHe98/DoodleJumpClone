@@ -1,10 +1,16 @@
-package de.fhkl.gatav.ut.doodlejumper;
+package de.fhkl.gatav.ut.doodlejumper.GameObject.Platform;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.List;
 
+
+import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Jetpack;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.JumpBooster;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Schild;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Springschuh;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Trampolin;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -14,7 +20,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
  * Laufzeit dynamisch gespawnt.
  */
 
-public class PlatformWithPowerUp extends Rectangle{
+public class PlatformWithPowerUp extends Rectangle {
 
 //    private final List currentPlatform;
     private double x;
@@ -29,7 +35,7 @@ public class PlatformWithPowerUp extends Rectangle{
 
     }
 
-    public List<PlatformWithPowerUp> selectPowerUp(List<PlatformWithPowerUp> platformwPU){
+    public List<PlatformWithPowerUp> selectPowerUp(List<PlatformWithPowerUp> platformwPU) {
         /**
          * Erzeugen einer Zufallszahl mithilfe der Hilfsklasse RandomGenerator um den Typ des PowerUps
          * zu bestimmen und die entsprechende PLattform mit passendem Item zu spawnen
@@ -54,7 +60,7 @@ public class PlatformWithPowerUp extends Rectangle{
                  * Jetpack auf die Mitte der PLattform setzen und der Liste der Plattformen mit PowerUps hinzufügen
                  */
                 Jetpack jetpack = new Jetpack(15);
-                jetpack.set(platformX/2, platformY);
+                jetpack.setPosition(new Vector2D(platformX/2, platformY));
 
                 platformwPU.add(platformWithJetpack);
                 return platformwPU;
@@ -73,7 +79,7 @@ public class PlatformWithPowerUp extends Rectangle{
                  * Jetpack auf die Mitte der PLattform setzen und der Liste der Plattformen mit PowerUps hinzufügen
                  */
                 Springschuh sprung = new Springschuh(7);
-                sprung.set(platformX/2, platformY);
+                sprung.setPosition(new Vector2D(platformX/2, platformY));
 
                 platformwPU.add(platformWithSpringschuh);
                 return platformwPU;
@@ -93,7 +99,7 @@ public class PlatformWithPowerUp extends Rectangle{
                  * Jetpack auf die Mitte der PLattform setzen und der Liste der Plattformen mit PowerUps hinzufügen
                  */
                 JumpBooster jump = new JumpBooster(10);
-                jump.set(platformX/2, platformY);
+                jump.setPosition(new Vector2D(platformX/2, platformY));
 
                 platformwPU.add(platformWithJumpBooster);
                 return platformwPU;
@@ -113,7 +119,7 @@ public class PlatformWithPowerUp extends Rectangle{
                  * Jetpack auf die Mitte der PLattform setzen und der Liste der Plattformen mit PowerUps hinzufügen
                  */
                 Schild schild = new Schild(15);
-                schild.set(platformX/2, platformY);
+                schild.setPosition(new Vector2D(platformX/2, platformY));
 
                 platformwPU.add(platformWithSchild);
                 return platformwPU;
@@ -134,7 +140,7 @@ public class PlatformWithPowerUp extends Rectangle{
                  * Jetpack auf die Mitte der PLattform setzen und der Liste der Plattformen mit PowerUps hinzufügen
                  */
                 Trampolin tramp = new Trampolin();
-                tramp.set(platformX/2, platformY);
+                tramp.setPosition(new Vector2D(platformX/2, platformY));
 
                 platformwPU.add(platformWithTrampolin);
                 return platformwPU;
@@ -165,7 +171,7 @@ public class PlatformWithPowerUp extends Rectangle{
     }
 
     @Override
-    protected void update() {
+    public void update() {
 
     }
 }

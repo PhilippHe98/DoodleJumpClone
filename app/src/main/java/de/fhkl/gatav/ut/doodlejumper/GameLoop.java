@@ -46,8 +46,6 @@ public class GameLoop extends Thread {
                     //increase updateCount immediately
                     updateCount++;
                     game.draw(canvas);
-                    game.drawUPS(canvas);
-                    game.drawFPS(canvas);
                 }
             } catch(SurfaceHolder.BadSurfaceTypeException e) {
                 e.printStackTrace();
