@@ -12,6 +12,7 @@ abstract public class GameObject {
 
     public GameObject(Vector2D position) {
         this.position = position;
+        velocity = new Vector2D();
     }
 
     public GameObject() {

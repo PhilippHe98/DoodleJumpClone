@@ -18,23 +18,24 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
-//import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.PlatformWithPowerUp;
+
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Projectile;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.stationaryEnemy;
-import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.hoveringEnemy;
-import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 /**
  * Hauptklasse der App die das Game und dessen Inhalte verwaltet
  */
 public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
+
+    private int score = 0;
+    private Paint scorePaint = new Paint();
+
     private final Player player;
     /**
      * festlegen der Startposition des Spielers, dabei werden x und y in der Update Methode überschrieben
@@ -104,6 +105,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         Enemy enemie2 = new stationaryEnemy(getContext(), new Vector2D(700,300), 100,100);
         enemies.add(enemie2);
         enemies.add(enemie1);
+
+        scorePaint.setColor(Color.WHITE);
+        scorePaint.setTextSize(40);
         setFocusable(true);
     }
 
@@ -118,10 +122,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             spawnManager.update();
             updateProjectiles();
             updatePlatforms();
-
-            for (Enemy enemy : enemies) {
-                enemy.update();
-            }
+            updateEnemies();
             handleProjectileCollisionWithEnemy();
 
             checkGameOver();
@@ -147,7 +148,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     private void updatePlatforms() {
         ArrayList<Platform> platformsToRemove = new ArrayList<>();
-
         if(player.getPosition().y <= 1300) {
             Platform.setMoveDown(true);
         } else {
@@ -162,6 +162,37 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
         for(Platform platform : platformsToRemove) {
             platforms.remove(platform);
+        }
+    }
+
+    private void updateEnemies() {
+        ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
+        if(player.getPosition().y <= 1300) {
+            Enemy.setMoveDown(true);
+        } else {
+            Enemy.setMoveDown(false);
+        }
+        for (Enemy enemy: enemies) {
+            enemy.update();
+            //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
+            if(enemy.getPosition().y > 2500) {
+                enemiesToRemove.add(enemy);
+            }
+        }
+        for(Enemy enemy : enemiesToRemove) {
+            platforms.remove(enemy);
+        }
+    }
+
+    private void updateProjectiles() {
+        Iterator<Projectile> iterator = projectiles.iterator();
+        while(iterator.hasNext()) {
+            Projectile projectile = iterator.next();
+            projectile.update();
+
+            if (projectile.getPosition().y < 0) {
+                iterator.remove();
+            }
         }
     }
 
@@ -213,6 +244,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             for(Projectile projectile: projectiles) {
                 projectile.draw(canvas);
             }
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
+            paint.setTextSize(40);
+
+            canvas.drawText(""+score, 900, 50, paint);
         }
 
     @Override
@@ -300,18 +336,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         canvas.drawText("FPS: " + averageFPS,100, 200, paint);
     }
 
-    private void updateProjectiles() {
-        Iterator<Projectile> iterator = projectiles.iterator();
-        while(iterator.hasNext()) {
-            Projectile projectile = iterator.next();
-            projectile.update();
-
-            if (projectile.getPosition().y < 0) {
-                iterator.remove();
-            }
-        }
-    }
-
     /**
      * spawnen und updaten der Gegner im Spiel
      */
@@ -354,5 +378,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     public void setIsPaused(boolean b) {
         isPaused = b;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

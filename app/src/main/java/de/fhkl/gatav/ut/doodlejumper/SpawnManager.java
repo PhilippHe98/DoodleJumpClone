@@ -42,7 +42,7 @@ public class SpawnManager {
         if (readyToSpawnPlatform()) {
             spawnPos = new Vector2D(Math.random()*1000,-200);
             if(checkSpawnPosition(spawnPos)) {
-                platforms.add(new Platform(context, spawnPos, 200, 50));
+                platforms.add(new Platform(context, spawnPos, 150, 50));
             }
         }
     }
@@ -71,7 +71,7 @@ public class SpawnManager {
         if(readyToSpawnEnemy() && enemies.size() < MAX_ENEMIES) {
             switch(RandomGenerator.generateRandomInt()){
                 case 1 :
-                    enemies.add(new stationaryEnemy(context ,new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
+                    enemies.add(new stationaryEnemy(context ,new Vector2D((Math.random()*1000),-200),90, 90));
                     break;
                 case 2 :
                     enemies.add(new hoveringEnemy(context,new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));

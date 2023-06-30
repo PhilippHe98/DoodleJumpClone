@@ -22,21 +22,21 @@ public class hoveringEnemy extends Enemy {
 
     @Override
     public void update() {
-        position.add(velocity);
-        calculateNewTopLeftAndBottomRight();
         if(position.x < 0) moveRight();
         if(position.x > 1000) moveLeft();
+
+        if(moveDown) velocity.set(velocity.x, VERTICAL_SPEED);
+        if(!moveDown) velocity.set(velocity.x, 0);
+        position.add(velocity);
+        calculateNewTopLeftAndBottomRight();
     }
 
     private void moveRight() {
-        velocity.set(PIXEL_PER_UPDATE, 0);
+        velocity.set(PIXEL_PER_UPDATE, velocity.y);
     }
 
     private void moveLeft() {
-        velocity.set(-PIXEL_PER_UPDATE, 0);
+        velocity.set(-PIXEL_PER_UPDATE, velocity.y);
     }
 
-    public boolean isColliding(Rectangle other) {
-        return false;
-    }
 }

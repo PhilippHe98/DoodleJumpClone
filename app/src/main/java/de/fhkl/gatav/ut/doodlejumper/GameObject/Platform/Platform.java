@@ -17,7 +17,7 @@ Einheitliche Göße der Plattformen ist festegelegt als: Höhe: 30 Pixel und Bre
  */
 public class Platform extends Rectangle {
 
-    private static final double VERTICA_SPEED = 1000.0 / GameLoop.MAX_UPS;
+    private static final double VERTICAL_SPEED = 1000.0 / GameLoop.MAX_UPS;
     private static boolean moveDown;
 
     public Platform(Context context, Vector2D position, double width, double height) {
@@ -58,7 +58,7 @@ public class Platform extends Rectangle {
     }
 
     public void update(){
-        if(moveDown) velocity.set(velocity.x, VERTICA_SPEED);
+        if(moveDown) velocity.set(velocity.x, VERTICAL_SPEED);
         if(!moveDown) velocity.set(velocity.x, 0);
        position.add(velocity);
        calculateNewTopLeftAndBottomRight();
