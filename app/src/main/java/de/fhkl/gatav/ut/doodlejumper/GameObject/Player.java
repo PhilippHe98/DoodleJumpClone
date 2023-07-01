@@ -1,9 +1,14 @@
 package de.fhkl.gatav.ut.doodlejumper.GameObject;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 
 import androidx.core.content.ContextCompat;
+
+import org.w3c.dom.ls.LSResourceResolver;
 
 import java.util.ArrayList;
 
@@ -30,6 +35,7 @@ public class Player extends Rectangle {
     private boolean collisionFeedback;
 
     MediaPlayer mediaPlayer;
+    Bitmap jwNormal;
 
     /**
      * Standardkonstruktor
@@ -43,6 +49,8 @@ public class Player extends Rectangle {
         super(position, width, height, ContextCompat.getColor(context, R.color.magenta));
         velocity = new Vector2D(0, MAX_SPEED);
         mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
+        Resources res = context.getResources();
+        jwNormal = BitmapFactory.decodeResource(res, R.id.jwView);
     }
 
     /**

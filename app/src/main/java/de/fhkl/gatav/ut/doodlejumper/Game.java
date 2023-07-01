@@ -65,6 +65,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private boolean isMainMenuVisible = true;
     private boolean isPaused = false;
     protected static Context context;
+    private Vector2D deathLine = new Vector2D(2000);
 
 
     public Game(Context context) {
@@ -206,6 +207,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     }
 
     private void checkGameOver() {
+        Vector2D playerPos = player.getPosition();
+        double playerPosy = playerPos.y;
+        if (playerPosy > deathLine.y) {
+            System.out.println("Game Over");
+        }
         for (Enemy enemy: enemies) {
             if(Rectangle.isColliding(player,enemy)) {
                 System.out.println("Game over");

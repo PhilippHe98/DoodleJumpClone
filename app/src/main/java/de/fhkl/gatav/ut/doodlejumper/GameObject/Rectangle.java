@@ -55,4 +55,5 @@ public abstract class Rectangle extends GameObject {
 
         return rectF1.intersect(rectF2);
     }
+
 }

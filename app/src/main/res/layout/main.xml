@@ -23,7 +23,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/jw_jumping"
         android:contentDescription="Hauptcharakter soringend"/>
     <ImageView
@@ -33,7 +33,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/jw_k_o"
         android:contentDescription="Hauptcharakter K.O."/>
     <ImageView
@@ -43,7 +43,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/waffe_links_nicht_springend"
         android:contentDescription="Hauptcharakter mit Schusswaffe links"/>
     <ImageView
@@ -53,7 +53,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/waffe_links_springend"
         android:contentDescription="Hauptcharakter springend mit Schusswaffe links"/>
     <ImageView
@@ -63,7 +63,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/waffe_rechts_nicht_springend"
         android:contentDescription="Hauptcharakter mit Schusswaffe rechts"/>
     <ImageView
@@ -73,7 +73,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/waffe_rechts_springend"
         android:contentDescription="Hauptcharakter springend mit Schusswaffe nach rechts"/>
     <ImageView
@@ -83,7 +83,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/enemy1"
         android:contentDescription="Gegnercharakter"/>
     <ImageView
@@ -93,7 +93,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="bottom|center_horizontal"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:src="@drawable/enemy2"
         android:contentDescription="Gegnercharakter"/>
     <ImageView
