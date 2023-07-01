@@ -40,7 +40,7 @@ public class PlatformWithPowerUp extends Rectangle {
          * Erzeugen einer Zufallszahl mithilfe der Hilfsklasse RandomGenerator um den Typ des PowerUps
          * zu bestimmen und die entsprechende PLattform mit passendem Item zu spawnen
          */
-        int type = RandomGenerator.generateRandomInt();
+        int type = RandomGenerator.generateRandomInt(7);
         /**
          * Durchlaufen eines Switch Cases um passenden Fall für die generierte Zahl zu finden
          */

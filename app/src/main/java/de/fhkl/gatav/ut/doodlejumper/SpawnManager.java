@@ -8,7 +8,10 @@ import java.util.List;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.hoveringEnemy;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.stationaryEnemy;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.BreakablePlatform;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.MovingPlatform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.StationaryPlatform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -42,7 +45,15 @@ public class SpawnManager {
         if (readyToSpawnPlatform()) {
             spawnPos = new Vector2D(Math.random()*1000,-200);
             if(checkSpawnPosition(spawnPos)) {
-                platforms.add(new Platform(context, spawnPos, 150, 50));
+                switch(RandomGenerator.generateRandomInt(3)){
+                    case 1:  platforms.add(new BreakablePlatform(context, spawnPos, 150, 50));
+                        break;
+                    case 2:  platforms.add(new MovingPlatform(context, spawnPos, 150, 50));
+                        break;
+                    default:
+                        platforms.add(new StationaryPlatform(context, spawnPos, 150, 50));
+                        break;
+                }
             }
         }
     }
@@ -69,7 +80,7 @@ public class SpawnManager {
     public void spawnEnemies(){
         //Spawn enemies when ready
         if(readyToSpawnEnemy() && enemies.size() < MAX_ENEMIES) {
-            switch(RandomGenerator.generateRandomInt()){
+            switch(RandomGenerator.generateRandomInt(2)){
                 case 1 :
                     enemies.add(new stationaryEnemy(context ,new Vector2D((Math.random()*1000),-200),90, 90));
                     break;

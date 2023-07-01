@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="magenta">#FF09FF</color>
-    <color name="plattform">#DAD125</color>
+    <color name="stationary_plattform">#00FF00</color>
+    <color name="moving_plattform">#00E6FF</color>
+    <color name="breakable_plattform">#A16600</color>
     <color name="powerUps">#24DF0F</color>
     <color name="enemy">#FF0011</color>
     <color name="projektil">#c1976d</color>

@@ -10,8 +10,8 @@ public class RandomGenerator {
     /**
     Generieren einer zufälligen ganzen Zahl zwischen 0 und 10 und gibt diese beim Methodenaufruf zurück
      */
-    public static int generateRandomInt(){
-        double randomd = Math.random()*10;
+    public static int generateRandomInt(int max){
+        double randomd = Math.random()*max;
         int random = (int) randomd;
         return random;
     }

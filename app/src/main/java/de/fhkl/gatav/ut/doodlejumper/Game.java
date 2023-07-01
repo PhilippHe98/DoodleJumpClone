@@ -8,6 +8,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.http.SslCertificate;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,6 +23,7 @@ import java.util.List;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
 
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.StationaryPlatform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Projectile;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
@@ -45,6 +47,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
 
     public static ArrayList<Platform> platforms = new ArrayList<>();
+    private static ArrayList<Platform> platformsToRemove = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Projectile> projectiles = new ArrayList<>();
     /**
@@ -84,13 +87,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         spawnManager = new SpawnManager(getContext());
 
         // Init one Platform
-        Platform platform1 = new Platform(getContext(), new Vector2D(200,1800), 200, 50);
-        Platform platform2 = new Platform(getContext(), new Vector2D(500,1600), 200, 50);
-        Platform platform3 = new Platform(getContext(), new Vector2D(700,2000), 200, 50);
-        Platform platform4 = new Platform(getContext(), new Vector2D(500, 1000), 200,50);
-        Platform platform5 = new Platform(getContext(), new Vector2D(500, 600), 200,50);
-        Platform platform6 = new Platform(getContext(), new Vector2D(900, 400), 200,50);
-        Platform platform7 = new Platform(getContext(), new Vector2D(300, 100), 200,50);
+        Platform platform1 = new StationaryPlatform(getContext(), new Vector2D(200,1800), 200, 50);
+        Platform platform2 = new StationaryPlatform(getContext(), new Vector2D(500,1600), 200, 50);
+        Platform platform3 = new StationaryPlatform(getContext(), new Vector2D(700,2000), 200, 50);
+        Platform platform4 = new StationaryPlatform(getContext(), new Vector2D(500, 1000), 200,50);
+        Platform platform5 = new StationaryPlatform(getContext(), new Vector2D(500, 600), 200,50);
+        Platform platform6 = new StationaryPlatform(getContext(), new Vector2D(900, 400), 200,50);
+        Platform platform7 = new StationaryPlatform(getContext(), new Vector2D(300, 100), 200,50);
 
 
         platforms.add(platform1);
@@ -110,7 +113,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         scorePaint.setTextSize(40);
         setFocusable(true);
     }
-
     /**
      * updatet kontinuierlich den Game State
      */
@@ -124,9 +126,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             updatePlatforms();
             updateEnemies();
             handleProjectileCollisionWithEnemy();
-
+            removePlatforms();
             checkGameOver();
-
         }
     }
     @Override
@@ -145,11 +146,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
     }
 
-
     private void updatePlatforms() {
-        ArrayList<Platform> platformsToRemove = new ArrayList<>();
         if(player.getPosition().y <= 1300) {
             Platform.setMoveDown(true);
+            // increase score
+            score+= 1;
         } else {
             Platform.setMoveDown(false);
         }
@@ -157,9 +158,17 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             platform.update();
             //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
             if(platform.getPosition().y > 2500) {
-                platformsToRemove.add(platform);
+                addPlatformsToRemove(platform);
             }
         }
+
+    }
+
+    public static void addPlatformsToRemove(Platform platform) {
+        platformsToRemove.add(platform);
+    }
+
+    private void removePlatforms() {
         for(Platform platform : platformsToRemove) {
             platforms.remove(platform);
         }
@@ -382,5 +391,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     public int getScore() {
         return score;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

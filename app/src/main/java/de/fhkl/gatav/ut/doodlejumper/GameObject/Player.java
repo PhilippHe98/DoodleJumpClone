@@ -5,8 +5,11 @@ import android.media.MediaPlayer;
 
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+
 import de.fhkl.gatav.ut.doodlejumper.Game;
 import de.fhkl.gatav.ut.doodlejumper.GameLoop;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.BreakablePlatform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
 import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -23,6 +26,8 @@ public class Player extends Rectangle {
     private boolean isJumping = false;
     private double gravityValue = 0.8;
     private double jumpForce = 35;
+
+    private boolean collisionFeedback;
 
     MediaPlayer mediaPlayer;
 
@@ -64,6 +69,10 @@ public class Player extends Rectangle {
                     if (!isJumping) {
                         velocity.y = -jumpForce;
                         mediaPlayer.start();
+                        // Zerstöre Plattform wenn richtiger Plattformtyp
+                        if(platform.getClass().toString().contains("BreakablePlatform")) {
+                            Game.addPlatformsToRemove(platform);
+                        }
                     }
                 }
             }
@@ -82,5 +91,9 @@ public class Player extends Rectangle {
      */
     public void moveSideways(float accelerationX) {
         velocity.set(-accelerationX * SIDE_MOVE_SPEED, velocity.y);
+    }
+
+    public boolean getCollisionFeedback() {
+        return collisionFeedback;
     }
 }

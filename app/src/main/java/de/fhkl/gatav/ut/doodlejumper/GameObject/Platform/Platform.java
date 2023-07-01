@@ -15,59 +15,26 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 Diese Klasse erstellt zufällig Plattformen im Spiel
 Einheitliche Göße der Plattformen ist festegelegt als: Höhe: 30 Pixel und Breite 75 Pixel
  */
-public class Platform extends Rectangle {
+public abstract class Platform extends Rectangle {
 
     private static final double VERTICAL_SPEED = 1000.0 / GameLoop.MAX_UPS;
     private static boolean moveDown;
 
-    public Platform(Context context, Vector2D position, double width, double height) {
-        super(position, width, height, ContextCompat.getColor(context, R.color.plattform));
-        velocity = new Vector2D();
-    }
-    public double pointOnScreen(Context context) {
-        /*
-        Methode sucht zufälligen Punkt auf dem Bildschirm
-        point -> immer int left eines Rechtecks
-         */
-        double point;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        /*
-        Screenbreite in Pixeln
-         */
-        int screenwidth = displayMetrics.widthPixels;
-        /*
-        Screenhöhe in Pixeln
-         */
-        int screenheight = displayMetrics.heightPixels;
-        /*
-        Einen zufälligen Punkt auf dem Bildschirm bestimmen, mit diesem dann die restlichen 3 berechnen
-        und daraus eine Plattform machen
-         */
-        point = Math.random()*screenwidth;
-        return point;
-    }
-    public void calculatePoints(double pointL){
-        double pointR = pointL + 75;
-        double pointT = pointL;
-        double pointB = pointR - 30;
-        /*
-        Anhand dieser Punkte Rechteck zeichnen
-         */
+    public Platform(Vector2D position, double width, double height, int color) {
+        super(position, width, height, color);
     }
 
-    public void update(){
+    protected void moveDown() {
         if(moveDown) velocity.set(velocity.x, VERTICAL_SPEED);
         if(!moveDown) velocity.set(velocity.x, 0);
-       position.add(velocity);
-       calculateNewTopLeftAndBottomRight();
+
+        position.add(velocity);
+        calculateNewTopLeftAndBottomRight();
     }
 
     public static void setMoveDown(boolean b) {
         moveDown = b;
     }
-
 }
 
 
