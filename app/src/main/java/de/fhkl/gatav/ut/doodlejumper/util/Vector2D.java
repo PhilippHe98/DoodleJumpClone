@@ -26,6 +26,9 @@ public class Vector2D {
         this.x = x;
         this.y = y;
     }
+    public Vector2D(double y) {
+        this.y = y;
+    }
     /**
     Konstruktor der die Werte x und y mit den Werten eines übergebenen Vectors initialisiert
      */
