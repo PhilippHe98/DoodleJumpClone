@@ -16,10 +16,6 @@ public class stationaryEnemy extends Enemy {
 
     @Override
     public void update() {
-        if(moveDown) velocity.set(velocity.x, VERTICAL_SPEED);
-        if(!moveDown) velocity.set(velocity.x, 0);
-        position.add(velocity);
-        calculateNewTopLeftAndBottomRight();
+        moveDown();
     }
-
 }

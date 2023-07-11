@@ -18,4 +18,9 @@ public class BreakablePlatform extends Platform {
     public void update() {
         moveDown();
     }
+
+    @Override
+    public void reactToEvent() {
+
+    }
 }

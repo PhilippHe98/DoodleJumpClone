@@ -15,6 +15,7 @@ public class MovingPlatform extends Platform{
     public MovingPlatform(Context context, Vector2D position, double width, double height) {
         super(position, width, height,  ContextCompat.getColor(context, R.color.moving_plattform));
 
+        // Bewegt sich zufällig links oder rechts beim Spawnen
         double random_index = Math.random();
         if (random_index < 0.5) random_index = -1;
         else {
@@ -31,10 +32,16 @@ public class MovingPlatform extends Platform{
     }
 
     private void moveSideWays() {
-        if(position.x < 0)
-        velocity.add(SIDE_MOVE_SPEED, velocity.y);
+        if(position.x < 0) {
+            velocity.add(SIDE_MOVE_SPEED, velocity.y);
+        }
         if(position.x > 1000) {
             velocity.add(-SIDE_MOVE_SPEED, velocity.y);
         }
+    }
+
+    @Override
+    public void reactToEvent() {
+
     }
 }

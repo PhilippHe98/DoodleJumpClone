@@ -37,4 +37,5 @@ abstract public class GameObject {
     public abstract void update();
 
     abstract void draw(Canvas canvas);
+
 }

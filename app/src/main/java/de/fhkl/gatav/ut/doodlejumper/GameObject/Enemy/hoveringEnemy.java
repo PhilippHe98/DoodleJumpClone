@@ -24,12 +24,7 @@ public class hoveringEnemy extends Enemy {
     public void update() {
         if(position.x < 0) moveRight();
         if(position.x > 1000) moveLeft();
-
-        if(moveDown) velocity.set(velocity.x, VERTICAL_SPEED);
-        if(!moveDown) velocity.set(velocity.x, 0);
-
-        position.add(velocity);
-        calculateNewTopLeftAndBottomRight();
+        moveDown();
     }
 
     private void moveRight() {
