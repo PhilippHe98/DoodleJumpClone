@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.hoveringEnemy;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
 
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.StationaryPlatform;
@@ -29,6 +31,7 @@ import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Projectile;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.stationaryEnemy;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
 import de.fhkl.gatav.ut.doodlejumper.Graphics.SpriteSheet;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
@@ -85,20 +88,24 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
         gameLoop = new GameLoop(this, surfaceHolder);
 
-        //Init Player
-        SpriteSheet spriteSheet = new SpriteSheet(context);
-        player = new Player(getContext(), playerPosition, 100,123, spriteSheet.getPlayerSprite());
+
+        //Spritesheet ist das eigentliche Bild
+        SpriteSheet playerSpriteSheet = new SpriteSheet(context, R.drawable.jw_normal);
+        //Sprite gibt dem Spritesheet einen Rahmen (Dimension in Pixeln) und ist für das Zeichnen verantwortlich
+        Sprite playerSprite = new Sprite(playerSpriteSheet, new Rect(0,0,3009,3716));
+        //Init Player, height 100 und width 123 haben das selbe verhältnis wie die 3009x3716 bei den Spritepixeln
+        player = new Player(getContext(), playerPosition, 150,185, playerSprite);
 
         spawnManager = new SpawnManager(getContext());
 
         // Init one Platform
-        Platform platform1 = new StationaryPlatform(getContext(), new Vector2D(200,1800), 200, 50);
-        Platform platform2 = new StationaryPlatform(getContext(), new Vector2D(500,1600), 200, 50);
-        Platform platform3 = new StationaryPlatform(getContext(), new Vector2D(700,2000), 200, 50);
-        Platform platform4 = new StationaryPlatform(getContext(), new Vector2D(500, 1000), 200,50);
-        Platform platform5 = new StationaryPlatform(getContext(), new Vector2D(500, 600), 200,50);
-        Platform platform6 = new StationaryPlatform(getContext(), new Vector2D(900, 400), 200,50);
-        Platform platform7 = new StationaryPlatform(getContext(), new Vector2D(300, 100), 200,50);
+        Platform platform1 = new StationaryPlatform(getContext(), new Vector2D(200,1800), 150, 50);
+        Platform platform2 = new StationaryPlatform(getContext(), new Vector2D(500,1600), 150, 50);
+        Platform platform3 = new StationaryPlatform(getContext(), new Vector2D(700,2000), 150, 50);
+        Platform platform4 = new StationaryPlatform(getContext(), new Vector2D(500, 1000), 150,50);
+        Platform platform5 = new StationaryPlatform(getContext(), new Vector2D(500, 600), 150,50);
+        Platform platform6 = new StationaryPlatform(getContext(), new Vector2D(900, 400), 150,50);
+        Platform platform7 = new StationaryPlatform(getContext(), new Vector2D(300, 100), 150,50);
 
 
         platforms.add(platform1);

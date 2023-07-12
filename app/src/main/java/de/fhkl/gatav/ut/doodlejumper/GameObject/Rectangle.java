@@ -23,7 +23,7 @@ public abstract class Rectangle extends GameObject {
 
         paint = new Paint();
         paint.setColor(color);
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.STROKE);
 
         calculateNewTopLeftAndBottomRight();
     }

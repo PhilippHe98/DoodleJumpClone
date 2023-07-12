@@ -11,14 +11,10 @@ public class SpriteSheet {
     // Bitmap ist das was der Computer als Bild versteht, besteht aus einer Matrix, in der jedes Feld ein Pixel ist und jeder Pixel hat einen RGB wert.
     private Bitmap bitmap;
 
-    public SpriteSheet(Context context) {
+    public SpriteSheet(Context context, int drawable) {
         BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
         bitmapOptions.inScaled = false;
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.jw_normal, bitmapOptions);
-    }
-
-    public Sprite getPlayerSprite() {
-        return new Sprite(this, new Rect(0,0,3009,3716));
+        bitmap = BitmapFactory.decodeResource(context.getResources(), drawable, bitmapOptions);
     }
 
     public Bitmap getBitmap() {

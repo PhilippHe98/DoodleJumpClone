@@ -1,6 +1,7 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
 import android.content.Context;
+import android.graphics.Rect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +16,13 @@ import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.StationaryPlatform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Trampolin;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.SpriteSheet;
 import de.fhkl.gatav.ut.doodlejumper.Random.RandomGenerator;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class SpawnManager implements EventListener {
-    private static final int MAX_ENEMIES = 5;
+    private static final int MAX_ENEMIES = 2;
     private static List<Enemy> enemies = new ArrayList<>();
 
     private static final int MAX_PLATFORMS = 12;
@@ -28,7 +31,7 @@ public class SpawnManager implements EventListener {
     private static List<PowerUp> powerUps = new ArrayList<>();
     Context context;
 
-    private static final int ENEMY_UPDATES_PER_SPAWN = 300;
+    private static final int ENEMY_UPDATES_PER_SPAWN = 30;
     private static int enemyUpdatesUntilNextSpawn;
 
     private static final int PLATFORM_UPDATES_PER_SPAWN = 30;
@@ -38,8 +41,17 @@ public class SpawnManager implements EventListener {
     private static boolean playerTrampolin = false;
 
 
+    private SpriteSheet hoveringEmemySpriteSheet;
+    private Sprite hoveringEnemySprite;
+    private SpriteSheet stationaryEnemySpriteSheet;
+    private Sprite stationaryEnemySprite;
+
     public SpawnManager(Context context) {
         this.context = context;
+        hoveringEmemySpriteSheet = new SpriteSheet(context, R.drawable.enemy2);
+        hoveringEnemySprite = new Sprite(hoveringEmemySpriteSheet, new Rect(0,0,2508,3602));
+        stationaryEnemySpriteSheet = new SpriteSheet(context, R.drawable.enemy1);
+        stationaryEnemySprite = new Sprite(stationaryEnemySpriteSheet, new Rect(0,0, 2508, 3602));
     }
 
     public void update() {
@@ -73,7 +85,7 @@ public class SpawnManager implements EventListener {
                         break;
                     default: //case 3 und 4 -> macht stationary wahrscheinlicher
                         platforms.add(new StationaryPlatform(context, spawnPos, 150, 50));
-                        if(RandomGenerator.generateRandomInt(2) == 1) // 20% chance auf Powerup wenn Plattform spawnt
+                        if(RandomGenerator.generateRandomInt(9) == 1) // 20% chance auf Powerup wenn Plattform spawnt
                         generatePowerUp(new Vector2D(spawnPos.x, spawnPos.y - 50), 50,50);
                         break;
                 }
@@ -107,11 +119,11 @@ public class SpawnManager implements EventListener {
         //Spawn enemies when ready
         if(readyToSpawnEnemy() && enemies.size() < MAX_ENEMIES) {
             switch(RandomGenerator.generateRandomInt(2)){
-                case 1 :
-                    enemies.add(new stationaryEnemy(context ,new Vector2D((Math.random()*1000),-200),90, 90));
+                case 0 :
+                    enemies.add(new stationaryEnemy(context ,new Vector2D((Math.random()*1000),-400),120, 185, stationaryEnemySprite));
                     break;
-                case 2 :
-                    enemies.add(new hoveringEnemy(context,new Vector2D((Math.random()*1000),(Math.random()*1000)),90, 90));
+                case 1 :
+                    enemies.add(new hoveringEnemy(context, new Vector2D((Math.random()*1000), -400),120, 185, hoveringEnemySprite));
                     break;
             }
         }

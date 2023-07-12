@@ -67,8 +67,8 @@ public class Player extends Rectangle {
         //Nur für Testzwecke, Resettet den Spieler
 //        if (position.y > 2100) position.set(position.x, 500);
 
-        if (velocity.y > 0) isJumping = false;
-        if (velocity.y <= 0) isJumping = true;
+        if (velocity.y > 1) isJumping = false;
+        if (velocity.y <= 1) isJumping = true;
 
         // PowerUp Logik
         for(PowerUp powerUp: Game.powerUps) {
@@ -88,8 +88,9 @@ public class Player extends Rectangle {
         // Kollisionen resetten den Jump Timer
         for (Platform platform : Game.platforms) {
             if (isColliding(this, platform)) {
-                if(this.bottomRight.y > platform.topLeft.y) {
+                if(this.bottomRight.y -5 > platform.topLeft.y) {
                     if (!isJumping) {
+                        System.out.println("this: " + this.bottomRight.y + " other: "+ platform.topLeft.y);
                         velocity.y = -jumpForce;
                         mediaPlayer.start();
                         // Zerstöre Plattform wenn richtiger Plattformtyp
@@ -123,6 +124,7 @@ public class Player extends Rectangle {
     @Override
     public void draw(Canvas canvas) {
         playerSprite.draw(canvas, topLeft, bottomRight);
+        canvas.drawRect((float) topLeft.x, (float) topLeft.y, (float) bottomRight.x, (float) bottomRight.y, paint);
     }
 
     public void moveSideways(float accelerationX) {

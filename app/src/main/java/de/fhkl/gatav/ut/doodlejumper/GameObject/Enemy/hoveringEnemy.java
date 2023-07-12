@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.core.content.ContextCompat;
 
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
 import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -15,9 +16,10 @@ public class hoveringEnemy extends Enemy {
 
     private Vector2D velocity = new Vector2D(PIXEL_PER_UPDATE,0);
 
+    private Sprite enemySprite;
 
-    public hoveringEnemy(Context context, Vector2D position, double width, double height) {
-        super(position, width, height, ContextCompat.getColor(context, R.color.white));
+    public hoveringEnemy(Context context, Vector2D position, double width, double height, Sprite enemySprite) {
+        super(position, width, height, ContextCompat.getColor(context, R.color.white), enemySprite);
     }
 
     @Override

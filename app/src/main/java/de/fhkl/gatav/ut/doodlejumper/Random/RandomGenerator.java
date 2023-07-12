@@ -8,7 +8,7 @@ public class RandomGenerator {
 
     }
     /**
-    Generieren einer zufälligen ganzen Zahl zwischen 0 und max und gibt diese beim Methodenaufruf zurück
+    Generieren einer zufälligen ganzen Zahl zwischen 0 und max-1 und gibt diese beim Methodenaufruf zurück
      */
     public static int generateRandomInt(int max){
         double randomd = Math.random()*max;

@@ -42,8 +42,8 @@ public class MainActivity extends Activity {
         //Äquivalent zu GameView Klassen wie aus Tutorials bekannt
         game = new Game(this);
         setContentView(game);
-        background = BitmapFactory.decodeResource(getResources(), R.id.background);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        background = BitmapFactory.decodeResource(getResources(), R.id.background);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
 
