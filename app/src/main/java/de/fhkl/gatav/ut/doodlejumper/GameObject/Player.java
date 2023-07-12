@@ -1,6 +1,7 @@
 package de.fhkl.gatav.ut.doodlejumper.GameObject;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.location.GnssAntennaInfo;
 import android.media.MediaPlayer;
 
@@ -14,6 +15,7 @@ import de.fhkl.gatav.ut.doodlejumper.Game;
 import de.fhkl.gatav.ut.doodlejumper.GameLoop;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
 import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
@@ -46,18 +48,13 @@ public class Player extends Rectangle {
     **/
     private static int counter = 0;
 
-    /**
-     * Standardkonstruktor
-     *
-     * @param context  Übergebener Context
-     * @param position Position an dem der Spieler "spawnt"
-     * @param width    Breite des Spieler vom Mittelpunkt aus
-     * @param height   Höhe des Spielers vom Mittelpunkt aus
-     */
-    public Player(Context context, Vector2D position, double width, double height) {
+    private Sprite playerSprite;
+
+    public Player(Context context, Vector2D position, double width, double height, Sprite sprite) {
         super(position, width, height, ContextCompat.getColor(context, R.color.magenta));
         velocity = new Vector2D(0, MAX_SPEED);
         mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
+        this.playerSprite = sprite;
     }
 
     public void update() {
@@ -122,9 +119,12 @@ public class Player extends Rectangle {
         //Jumpforce wieder auf normalWert setzen
         jumpForce = DEFAULT_JUMP_FORCE;
     }
-    /**
-     * Methode um den Spieler nach rechts bzw. links zu bewegen
-     */
+
+    @Override
+    public void draw(Canvas canvas) {
+        playerSprite.draw(canvas, topLeft, bottomRight);
+    }
+
     public void moveSideways(float accelerationX) {
         velocity.set(-accelerationX * SIDE_MOVE_SPEED, velocity.y);
     }

@@ -29,6 +29,7 @@ import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Projectile;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.stationaryEnemy;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.SpriteSheet;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 /**
@@ -85,7 +86,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         gameLoop = new GameLoop(this, surfaceHolder);
 
         //Init Player
-        player = new Player(getContext(), playerPosition, 100,100);
+        SpriteSheet spriteSheet = new SpriteSheet(context);
+        player = new Player(getContext(), playerPosition, 100,123, spriteSheet.getPlayerSprite());
 
         spawnManager = new SpawnManager(getContext());
 
