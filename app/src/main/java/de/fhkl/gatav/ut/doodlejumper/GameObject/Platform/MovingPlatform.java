@@ -10,7 +10,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class MovingPlatform extends Platform{
 
-    private static final double  SIDE_MOVE_SPEED = 200 / GameLoop.MAX_UPS;
+    private static final double  SIDE_MOVE_SPEED = 300 / GameLoop.MAX_UPS;
 
     public MovingPlatform(Context context, Vector2D position, double width, double height) {
         super(position, width, height,  ContextCompat.getColor(context, R.color.moving_plattform));

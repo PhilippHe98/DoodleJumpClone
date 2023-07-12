@@ -129,6 +129,7 @@ public class Player extends Rectangle {
         velocity.set(-accelerationX * SIDE_MOVE_SPEED, velocity.y);
     }
 
+    // Code für Beobachtermuster, alle Beobachter oder hier Listener werden benachrichtigt, wenn der Player ein PowerUp aufsammelt. Hier in setState()
     public void registerListener(EventListener listener) {
         listeners.add(listener);
     }

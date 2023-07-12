@@ -12,7 +12,7 @@ public abstract class Enemy extends Rectangle implements EventListener {
 
     protected static final double DEFAULT_VERTICAL_SPEED = 1000.0 / GameLoop.MAX_UPS;
     protected static final double TRAMPOLIN_VERTICAL_SPEED = 1700 / GameLoop.MAX_UPS;
-    protected double vertical_speed = DEFAULT_VERTICAL_SPEED;
+    protected double vertical_speed;
     protected static boolean moveDown = false;
     protected Player player;
 

@@ -22,7 +22,7 @@ public class SpawnManager implements EventListener {
     private static final int MAX_ENEMIES = 5;
     private static List<Enemy> enemies = new ArrayList<>();
 
-    private static final int MAX_PLATFORMS = 10;
+    private static final int MAX_PLATFORMS = 12;
     private static final int MIN_PLATFORMS = 4;
     private static List<Platform> platforms = new ArrayList<>();
     private static List<PowerUp> powerUps = new ArrayList<>();
@@ -31,7 +31,7 @@ public class SpawnManager implements EventListener {
     private static final int ENEMY_UPDATES_PER_SPAWN = 300;
     private static int enemyUpdatesUntilNextSpawn;
 
-    private static final int PLATFORM_UPDATES_PER_SPAWN = 40;
+    private static final int PLATFORM_UPDATES_PER_SPAWN = 30;
     private static int platformUpdatesUntilNextSpawn;
 
     private static Player player;
@@ -51,7 +51,12 @@ public class SpawnManager implements EventListener {
     }
 
     private void generatePowerUp(Vector2D spawnPos, double width, double height) {
-        powerUps.add(new Trampolin(context, spawnPos, width, height));
+        PowerUp powerUp = new Trampolin(context, spawnPos, width, height);
+        //
+        powerUp.setPlayer(player);
+        powerUp.reactToEvent();
+        //
+        powerUps.add(powerUp);
     }
 
     private void spawnPlatforms() {
@@ -68,7 +73,7 @@ public class SpawnManager implements EventListener {
                         break;
                     default: //case 3 und 4 -> macht stationary wahrscheinlicher
                         platforms.add(new StationaryPlatform(context, spawnPos, 150, 50));
-                        if(RandomGenerator.generateRandomInt(4) == 1) // 20% chance auf Powerup wenn Plattform spawnt
+                        if(RandomGenerator.generateRandomInt(2) == 1) // 20% chance auf Powerup wenn Plattform spawnt
                         generatePowerUp(new Vector2D(spawnPos.x, spawnPos.y - 50), 50,50);
                         break;
                 }
@@ -151,6 +156,7 @@ public class SpawnManager implements EventListener {
         if(player != null) {
             switch (player.getState()) {
                 case "TRAMPOLIN":
+                    // Das setzen auf true, lässt mehr Plattformen spawnen indem der Timer ignoriert wird, wenn playerTrampolin true ist
                     playerTrampolin = true;
                     break;
                 case "DEFAULT":
