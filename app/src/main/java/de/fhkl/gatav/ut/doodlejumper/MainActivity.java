@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
         game = new Game(this);
         setContentView(game);
 //        background = BitmapFactory.decodeResource(getResources(), R.id.background);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+          getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     }
 

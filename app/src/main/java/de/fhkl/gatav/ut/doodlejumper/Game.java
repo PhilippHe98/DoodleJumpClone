@@ -41,6 +41,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
 
     private int score = 0;
+    public int death = 0;
     private Paint scorePaint = new Paint();
 
     private final Player player;
@@ -82,7 +83,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        // get surface golder and add callback
+        // get surface Holder and add callback
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
@@ -155,19 +156,29 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     @Override
     public void draw(Canvas canvas) {
+        // Umschreiben zu Switch Case mit death als Variable um Todesfälle zu unterscheiden.
         super.draw(canvas);
-        if(canvas != null){
-            // Spielinhalte auf den Canvas zeichnen
-            if (isPaused) {
-                drawPauseMenu(canvas);
-            } else if (isMainMenuVisible) {
-                drawMainMenu(canvas);
-            } else {
-                drawGameContent(canvas);
+        switch(death){
+            // wenn Spieler ausserhalb des Bildschirms ist
+            case 1: drawGameOver(canvas); break;
+            // Spieler wurde von Gegner getroffen
+            case 2: GameLoop.stopLoop(); drawGameOver(canvas); break;
+            default: if(canvas != null){
+                // Spielinhalte auf den Canvas zeichnen
+                if (isPaused) {
+                    drawPauseMenu(canvas);
+                } else if (isMainMenuVisible) {
+                    drawMainMenu(canvas);
+                } else{
+                    drawGameContent(canvas);
+                }
+                getHolder().unlockCanvasAndPost(canvas);
             }
-            getHolder().unlockCanvasAndPost(canvas);
         }
+
     }
+
+
 
     private void updatePowerUps() {
         ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
@@ -250,17 +261,20 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
     }
 
-    private void checkGameOver() {
+    private boolean checkGameOver() {
         Vector2D playerPos = player.getPosition();
         double playerPosy = playerPos.y;
         if (playerPosy > deathLine.y) {
-            System.out.println("Game Over");
+            death = 1;
+            return true;
         }
         for (Enemy enemy: enemies) {
             if(Rectangle.isColliding(player,enemy)) {
-                System.out.println("Game over");
+                death = 2;
+               return true;
             }
         }
+        return false;
     }
 
     private void drawPauseMenu(Canvas canvas) {
@@ -288,6 +302,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             paint2.setTextAlign(Paint.Align.CENTER);
             canvas.drawText("TAP TO PLAY", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint2);
         }
+    private void drawGameOver(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(60);
+        paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("Game Over! Dein Score ist: " + score, canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
+    }
 
     private void drawGameContent(Canvas canvas) {
         super.draw(canvas);
