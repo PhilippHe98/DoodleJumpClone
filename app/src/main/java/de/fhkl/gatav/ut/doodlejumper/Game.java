@@ -1,9 +1,13 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Picture;
 import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,6 +17,9 @@ import android.net.http.SslCertificate;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -73,6 +80,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private boolean isPaused = false;
     protected static Context context;
     private Vector2D deathLine = new Vector2D(2000);
+    private boolean GameOverScreenVisible;
+
+
 
 
     public Game(Context context) {
@@ -160,7 +170,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         super.draw(canvas);
         switch(death){
             // wenn Spieler ausserhalb des Bildschirms ist
-            case 1: drawGameOver(canvas); break;
+            case 1: GameLoop.stopLoop(); drawGameOver(canvas); break;
             // Spieler wurde von Gegner getroffen
             case 2: GameLoop.stopLoop(); drawGameOver(canvas); break;
             default: if(canvas != null){
@@ -303,11 +313,21 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             canvas.drawText("TAP TO PLAY", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint2);
         }
     private void drawGameOver(Canvas canvas) {
+        GameOverScreenVisible = true;
+
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
-        paint.setTextSize(60);
+        paint.setTextSize(90);
         paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("Game Over! Dein Score ist: " + score, canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
+        canvas.drawText("GAME OVER!", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
+
+        Paint paint2 = new Paint();
+        paint2.setColor(Color.WHITE);
+        paint2.setTextSize(65);
+        paint2.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("Dein Score ist: " + score, canvas.getWidth()/2f, canvas.getHeight()/1.5f, paint2);
+
+        canvas.drawText("Tap to Play Again", canvas.getWidth()/2f, canvas.getHeight()/1.4f, paint2);
     }
 
     private void drawGameContent(Canvas canvas) {
@@ -340,7 +360,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             if (isMainMenuVisible) {
                 // Starte das Spiel, wenn der Bildschirm berührt wird und das Hauptmenü sichtbar ist
                 isMainMenuVisible = false;
-            } else {
+            } else if(GameOverScreenVisible){
+                GameOverScreenVisible = false;
+            }
+            else {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         // Schieße ein Projektil, wenn der Bildschirm berührt wird und das Spiel läuft
