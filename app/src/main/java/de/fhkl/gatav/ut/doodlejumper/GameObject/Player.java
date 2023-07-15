@@ -2,6 +2,7 @@ package de.fhkl.gatav.ut.doodlejumper.GameObject;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.location.GnssAntennaInfo;
 import android.media.MediaPlayer;
 
@@ -30,11 +31,13 @@ public class Player extends Rectangle {
     private static final double SPEED_PIXELS_PER_SECOND = 1200.0;
     private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
     private static final double SIDE_MOVE_SPEED = 300.0 / GameLoop.MAX_UPS;
-
+    private static final double MAX_SHIELD_DURATION = 700;
+    private final double MAX_JETPACK_DURATION = 500;
     private boolean isJumping = false;
     private double gravityValue = 0.8;
     private final double DEFAULT_JUMP_FORCE = 35;
     private final double TRAMPOLIN_JUMP_FORCE = 50;
+    private final double JETPACK_VELOCITY = 50;
     private double jumpForce = DEFAULT_JUMP_FORCE;
 
     MediaPlayer mediaPlayer;
@@ -49,23 +52,34 @@ public class Player extends Rectangle {
     private static int counter = 0;
 
     private Sprite playerSprite;
+    private boolean isShielded = false;
+    private double shieldDuration = MAX_SHIELD_DURATION;
+    private final Paint shieldPaint;
+    private boolean isJetpack = false;
+    private double jetpackDuration = MAX_JETPACK_DURATION;
+
 
     public Player(Context context, Vector2D position, double width, double height, Sprite sprite) {
         super(position, width, height, ContextCompat.getColor(context, R.color.magenta));
         velocity = new Vector2D(0, MAX_SPEED);
         mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
         this.playerSprite = sprite;
+
+        shieldPaint = new Paint();
+        shieldPaint.setColor(ContextCompat.getColor(context, R.color.Schild));
+        shieldPaint.setStyle(Paint.Style.STROKE);
     }
 
     public void update() {
+
+        StartShieldCountdown();
+        StartJetpackCountdown();
+
         // Seitenwechsel
         if (position.x < -50) position.set(1050, position.y);
         if (position.x > 1050) position.set(-50, position.y);
 
         if(position.y < 1300) position.set(position.x, 1300);
-
-        //Nur für Testzwecke, Resettet den Spieler
-//        if (position.y > 2100) position.set(position.x, 500);
 
         if (velocity.y > 1) isJumping = false;
         if (velocity.y <= 1) isJumping = true;
@@ -73,6 +87,18 @@ public class Player extends Rectangle {
         // PowerUp Logik
         for(PowerUp powerUp: Game.powerUps) {
             if(isColliding(this, powerUp)) {
+                if(powerUp.getClass().toString().contains("Schild")) {
+                    isShielded = true;
+                    shieldDuration = MAX_SHIELD_DURATION;
+                    Game.addPowerUpToRemove(powerUp);
+                }
+
+                if(powerUp.getClass().toString().contains("Jetpack")){
+                    isJetpack = true;
+                    jetpackDuration = MAX_JETPACK_DURATION;
+                    Game.addPowerUpToRemove(powerUp);
+                }
+
                 if(this.bottomRight.y > powerUp.topLeft.y) {
                     if(!isJumping) {
                         if(powerUp.getClass().toString().contains("Trampolin")) {
@@ -113,6 +139,12 @@ public class Player extends Rectangle {
         //Begrenzung der Geschwindigkeit
         if (velocity.y > 20) velocity.y = 20;
 
+        // Wenn Jetpack dann velocity immer JETPACK VELOCITY, egal was vorher berechnet wurde
+        if(isJetpack) {
+            setState(PlayerState.JETPACK);
+            velocity.y = -JETPACK_VELOCITY;
+        }
+
         // der aktuellen Position des Spielers die festgelegte Velocity dazuaddieren
         position.add(velocity);
         // berechnen der neuen Maße des Rechtecks
@@ -123,12 +155,33 @@ public class Player extends Rectangle {
 
     @Override
     public void draw(Canvas canvas) {
+        if(isShielded) {
+            canvas.drawRect((float) topLeft.x, (float) topLeft.y, (float) bottomRight.x, (float) bottomRight.y, shieldPaint);
+        }
         playerSprite.draw(canvas, topLeft, bottomRight);
-        canvas.drawRect((float) topLeft.x, (float) topLeft.y, (float) bottomRight.x, (float) bottomRight.y, paint);
     }
 
     public void moveSideways(float accelerationX) {
         velocity.set(-accelerationX * SIDE_MOVE_SPEED, velocity.y);
+    }
+
+    private void StartJetpackCountdown() {
+        if(!isJetpack) return;
+        if(jetpackDuration <= 0) {
+            isJetpack = false;
+            setState(PlayerState.DEFAULT);
+        } else {
+            jetpackDuration--;
+        }
+    }
+
+    private void StartShieldCountdown(){
+        if(!isShielded) return;
+        if(shieldDuration <= 0){
+            isShielded = false;
+        }else {
+            shieldDuration--;
+        }
     }
 
     // Code für Beobachtermuster, alle Beobachter oder hier Listener werden benachrichtigt, wenn der Player ein PowerUp aufsammelt. Hier in setState()
@@ -150,5 +203,9 @@ public class Player extends Rectangle {
     private void setState(PlayerState state) {
         this.playerState = state;
         notifyListeners();
+    }
+
+    public boolean isShielded() {
+        return isShielded;
     }
 }

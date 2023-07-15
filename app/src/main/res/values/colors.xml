@@ -15,4 +15,7 @@
     <color name="enemy">#FF0011</color>
     <color name="projektil">#c1976d</color>
     <color name="Trampolin">#DBB273</color>
+    <color name="Schild">#6CCAAB</color>
+    <color name="Jetpack">#FF5BD6</color>
+    <color name="blue">#2C9BB8</color>
 </resources>

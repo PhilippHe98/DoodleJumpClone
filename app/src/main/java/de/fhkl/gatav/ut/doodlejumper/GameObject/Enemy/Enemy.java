@@ -28,8 +28,8 @@ public abstract class Enemy extends Rectangle implements EventListener {
 
     @Override
     public void draw(Canvas canvas) {
-        enemySprite.draw(canvas, topLeft, bottomRight);
         canvas.drawRect((float)topLeft.x, (float) topLeft.y, (float) bottomRight.x,(float) bottomRight.y, paint);
+        enemySprite.draw(canvas, topLeft, bottomRight);
     }
     protected void moveDown() {
         if(moveDown) velocity.set(velocity.x, vertical_speed);
@@ -63,6 +63,9 @@ public abstract class Enemy extends Rectangle implements EventListener {
         if(player != null) {
             switch (player.getState()) {
                 case "TRAMPOLIN":
+                    vertical_speed = TRAMPOLIN_VERTICAL_SPEED;
+                    break;
+                case "JETPACK":
                     vertical_speed = TRAMPOLIN_VERTICAL_SPEED;
                     break;
                 default:

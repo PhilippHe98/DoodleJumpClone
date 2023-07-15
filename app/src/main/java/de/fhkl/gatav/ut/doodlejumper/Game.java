@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Background;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.hoveringEnemy;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
@@ -58,12 +59,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private final Vector2D playerStartPosition = new Vector2D(500,1500);
     Vector2D playerPosition = new Vector2D(playerStartPosition.x, playerStartPosition.y);
 
-
     public static ArrayList<Platform> platforms = new ArrayList<>();
     public static ArrayList<Enemy> enemies = new ArrayList<>();
     public static ArrayList<Projectile> projectiles = new ArrayList<>();
     public static ArrayList<PowerUp> powerUps = new ArrayList<>();
     private static ArrayList<Platform> platformsToRemove = new ArrayList<>();
+    private static ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
+    private static ArrayList<Projectile> projectilesToRemove = new ArrayList<>();
+    private static ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
     /**
      * Sensoren und Manager um die Neigung zu handlen
      */
@@ -79,10 +82,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private boolean isMainMenuVisible = true;
     private boolean isPaused = false;
     protected static Context context;
-    private Vector2D deathLine = new Vector2D(2000);
+    private Vector2D deathLine = new Vector2D(2400);
     private boolean GameOverScreenVisible;
 
-
+    private Background background;
 
 
     public Game(Context context) {
@@ -132,6 +135,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         scorePaint.setTextSize(40);
         setFocusable(true);
 
+
+        background = new Background(context,new Vector2D(540, 1088), 1080, 2177);
         spawnManager.setPlayer(player);
     }
     /**
@@ -140,7 +145,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void update() {
 
         if(!isPaused && !isMainMenuVisible) {
-            // Nötiger Code für Beobachtermuster
+
             for(Platform platform: platforms) {
                 platform.setPlayer(player);
             }
@@ -160,6 +165,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             updatePowerUps();
             handleProjectileCollisionWithEnemy();
             removePlatforms();
+            removePowerUps();
+            removeProjectiles();
+            removeEnemies();
             checkGameOver();
         }
     }
@@ -185,10 +193,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 getHolder().unlockCanvasAndPost(canvas);
             }
         }
-
     }
-
-
 
     private void updatePowerUps() {
         ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
@@ -200,7 +205,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for (PowerUp powerUp: powerUps) {
             powerUp.update();
             //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
-            if(powerUp.getPosition().y > 2500) {
+            if(powerUp.getPosition().y > 2400) {
                 powerUpsToRemove.add(powerUp);
             }
         }
@@ -221,7 +226,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for (Platform platform: platforms) {
             platform.update();
             //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
-            if(platform.getPosition().y > 2500) {
+            if(platform.getPosition().y > 2000) {
                 addPlatformsToRemove(platform);
             }
         }
@@ -239,8 +244,25 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
     }
 
+    private void removeEnemies() {
+        for (Enemy enemy: enemiesToRemove) {
+            enemies.remove(enemy);
+        }
+    }
+
+
+    public static void addPowerUpToRemove(PowerUp powerUp) {
+        powerUpsToRemove.add(powerUp);
+    }
+
+    private void removePowerUps() {
+        for(PowerUp powerUp : powerUpsToRemove) {
+            powerUp.removeListener();
+            powerUps.remove(powerUp);
+        }
+    }
+
     private void updateEnemies() {
-        ArrayList<Enemy> enemiesToRemove = new ArrayList<>();
         if(player.getPosition().y <= 1300) {
             Enemy.setMoveDown(true);
         } else {
@@ -253,35 +275,39 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 enemiesToRemove.add(enemy);
             }
         }
-        for(Enemy enemy : enemiesToRemove) {
-            enemy.removeListener();
-            enemies.remove(enemy);
-        }
     }
 
     private void updateProjectiles() {
+
         Iterator<Projectile> iterator = projectiles.iterator();
         while(iterator.hasNext()) {
             Projectile projectile = iterator.next();
             projectile.update();
 
             if (projectile.getPosition().y < 0) {
-                iterator.remove();
+                projectilesToRemove.add(projectile);
             }
         }
     }
 
+    private void removeProjectiles() {
+        for(Projectile projectile : projectilesToRemove) {
+            projectiles.remove(projectile);
+        }
+    }
+
     private boolean checkGameOver() {
-        Vector2D playerPos = player.getPosition();
-        double playerPosy = playerPos.y;
+        double playerPosy = player.getPosition().y;
         if (playerPosy > deathLine.y) {
             death = 1;
             return true;
         }
         for (Enemy enemy: enemies) {
             if(Rectangle.isColliding(player,enemy)) {
-                death = 2;
-               return true;
+                if(!player.isShielded()) {
+                    death = 2;
+                    return true;
+                }
             }
         }
         return false;
@@ -331,10 +357,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     }
 
     private void drawGameContent(Canvas canvas) {
+        // Was oben steht wird zuerst gerendert, kann also vom unten stehenden Objekten überlagert werden
         super.draw(canvas);
-        drawUPS(canvas);
-        drawFPS(canvas);
-        player.draw(canvas);
+        background.draw(canvas);
+
         for(Enemy enemy : enemies){
             enemy.draw(canvas);
         }
@@ -347,10 +373,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for(PowerUp powerUp: powerUps) {
             powerUp.draw(canvas);
         }
+        player.draw(canvas);
         // Score
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(40);
+        drawUPS(canvas);
+        drawFPS(canvas);
         canvas.drawText(""+score, 900, 50, paint);
     }
     @Override
@@ -398,8 +427,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     }
     protected void handleProjectileCollisionWithEnemy() {
-        List<Enemy> enemiesToRemove = new ArrayList<>();
-        List<Projectile> projectilesToRemove = new ArrayList<>();
         for (Projectile projectile : projectiles) {
             for(Enemy enemy : enemies) {
                 if(Rectangle.isColliding(projectile, enemy)) {
@@ -408,18 +435,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 }
             }
         }
-        for (Enemy enemy : enemiesToRemove) {
-            enemies.remove(enemy);
-        }
-        for(Projectile projectile : projectilesToRemove) {
-            projectiles.remove(projectile);
-        }
     }
 
     public void drawUPS(Canvas canvas) {
         String averageUPS = Double.toString(gameLoop.getAverageUPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.magenta);
+        int color = ContextCompat.getColor(getContext(), R.color.black);
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("UPS: " + averageUPS,100, 100, paint);
@@ -428,7 +449,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void drawFPS(Canvas canvas) {
         String averageFPS = Double.toString(gameLoop.getAverageFPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.magenta);
+        int color = ContextCompat.getColor(getContext(), R.color.black);
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("FPS: " + averageFPS,100, 200, paint);

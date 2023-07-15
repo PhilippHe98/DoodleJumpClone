@@ -67,11 +67,13 @@ public abstract class PowerUp extends Rectangle implements EventListener {
                 case "TRAMPOLIN":
                     vertical_speed = TRAMPOLIN_VERTICAL_SPEED;
                     break;
+                case "JETPACK":
+                    vertical_speed = TRAMPOLIN_VERTICAL_SPEED;
+                    break;
                 default:
                     vertical_speed = DEFAULT_VERTICAL_SPEED;
 
             }
         }
     }
-
 }

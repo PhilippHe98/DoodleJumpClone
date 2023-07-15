@@ -11,6 +11,7 @@ public class GameLoop extends Thread {
     private final Game game;
     private double averageUPS;
     private double averageFPS;
+    private static Canvas canvas;
 
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
@@ -34,7 +35,7 @@ public class GameLoop extends Thread {
 
         // Game Loop
         startTime = System.currentTimeMillis();
-        Canvas canvas = null;
+        canvas = null;
         while(isRunning) {
 
             // Try to update and render game
@@ -45,6 +46,7 @@ public class GameLoop extends Thread {
                     game.update();
                     //increase updateCount immediately
                     updateCount++;
+                    frameCount++;
                     game.draw(canvas);
                 }
             } catch(SurfaceHolder.BadSurfaceTypeException e) {
@@ -53,7 +55,6 @@ public class GameLoop extends Thread {
                 if(canvas != null) {
                     try {
                         surfaceHolder.unlockCanvasAndPost(canvas);
-                        frameCount++;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -99,7 +100,11 @@ public class GameLoop extends Thread {
         return averageFPS;
     }
 
-  public static void stopLoop(){
+    public static void stopLoop(){
     isRunning = false;
-}
+    }
+
+    public static Canvas getCanvas() {
+        return canvas;
+    }
 }

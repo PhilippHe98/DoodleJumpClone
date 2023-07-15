@@ -10,6 +10,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -20,7 +21,8 @@ import android.widget.ImageView;
 public class MainActivity extends Activity {
 
     private Game game;
-    public static Bitmap background;
+    public static int displayHeight;
+    public static int displayWidth;
 
     /**
      * Erstellen von SensorManager Objekt, Sensor Objekt und SensorEventListener Objekt
@@ -42,9 +44,19 @@ public class MainActivity extends Activity {
         //Äquivalent zu GameView Klassen wie aus Tutorials bekannt
         game = new Game(this);
         setContentView(game);
-//        background = BitmapFactory.decodeResource(getResources(), R.id.background);
-          getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//       background = BitmapFactory.decodeResource(getResources(), R.id.background);
+//       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        // on below line we are getting metrics for display using window manager.
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        // on below line we are getting height
+        // and width using display metrics.
+        displayHeight = displayMetrics.heightPixels;
+        displayWidth = displayMetrics.widthPixels;
+        System.out.println("Height/Width: " + displayHeight + "/" + displayWidth);
     }
 
     /**
@@ -54,7 +66,6 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         game.registerSensorListener();
-
     }
 
     /**

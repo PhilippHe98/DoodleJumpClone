@@ -14,7 +14,9 @@ import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.MovingPlatform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.StationaryPlatform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Jetpack;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Schild;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.Trampolin;
 import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
 import de.fhkl.gatav.ut.doodlejumper.Graphics.SpriteSheet;
@@ -25,7 +27,7 @@ public class SpawnManager implements EventListener {
     private static final int MAX_ENEMIES = 2;
     private static List<Enemy> enemies = new ArrayList<>();
 
-    private static final int MAX_PLATFORMS = 12;
+    private static final int MAX_PLATFORMS = 10;
     private static final int MIN_PLATFORMS = 4;
     private static List<Platform> platforms = new ArrayList<>();
     private static List<PowerUp> powerUps = new ArrayList<>();
@@ -39,12 +41,13 @@ public class SpawnManager implements EventListener {
 
     private static Player player;
     private static boolean playerTrampolin = false;
-
+    private boolean playerJetpack = false;
 
     private SpriteSheet hoveringEmemySpriteSheet;
     private Sprite hoveringEnemySprite;
     private SpriteSheet stationaryEnemySpriteSheet;
     private Sprite stationaryEnemySprite;
+
 
     public SpawnManager(Context context) {
         this.context = context;
@@ -63,8 +66,17 @@ public class SpawnManager implements EventListener {
     }
 
     private void generatePowerUp(Vector2D spawnPos, double width, double height) {
-        PowerUp powerUp = new Trampolin(context, spawnPos, width, height);
-        //
+        PowerUp powerUp;
+        switch (RandomGenerator.generateRandomInt(3)) {
+            case 1:
+                powerUp = new Schild(context, spawnPos, width, height);
+                break;
+            case 2:
+                powerUp = new Jetpack(context, spawnPos, width, height);
+                break;
+            default:
+                powerUp = new Trampolin(context, spawnPos, width, height);
+        }
         powerUp.setPlayer(player);
         powerUp.reactToEvent();
         //
@@ -85,7 +97,7 @@ public class SpawnManager implements EventListener {
                         break;
                     default: //case 3 und 4 -> macht stationary wahrscheinlicher
                         platforms.add(new StationaryPlatform(context, spawnPos, 150, 50));
-                        if(RandomGenerator.generateRandomInt(9) == 1) // 20% chance auf Powerup wenn Plattform spawnt
+                        if(RandomGenerator.generateRandomInt(9) == 1) // 1/8 chance auf Powerup wenn Plattform spawnt
                         generatePowerUp(new Vector2D(spawnPos.x, spawnPos.y - 50), 50,50);
                         break;
                 }
@@ -104,7 +116,7 @@ public class SpawnManager implements EventListener {
 
     private boolean readyToSpawnPlatform() {
 
-        if(playerTrampolin && platforms.size() <= MAX_PLATFORMS) return true;
+        if((playerJetpack || playerTrampolin) && platforms.size() <= MAX_PLATFORMS) return true;
         if(platforms.size() < MIN_PLATFORMS) return true;
         if(platformUpdatesUntilNextSpawn <= 0){
             platformUpdatesUntilNextSpawn += PLATFORM_UPDATES_PER_SPAWN;
@@ -118,13 +130,15 @@ public class SpawnManager implements EventListener {
     public void spawnEnemies(){
         //Spawn enemies when ready
         if(readyToSpawnEnemy() && enemies.size() < MAX_ENEMIES) {
-            switch(RandomGenerator.generateRandomInt(2)){
+            switch(RandomGenerator.generateRandomInt(3)){
                 case 0 :
                     enemies.add(new stationaryEnemy(context ,new Vector2D((Math.random()*1000),-400),120, 185, stationaryEnemySprite));
                     break;
                 case 1 :
                     enemies.add(new hoveringEnemy(context, new Vector2D((Math.random()*1000), -400),120, 185, hoveringEnemySprite));
                     break;
+                default:
+
             }
         }
     }
@@ -171,8 +185,12 @@ public class SpawnManager implements EventListener {
                     // Das setzen auf true, lässt mehr Plattformen spawnen indem der Timer ignoriert wird, wenn playerTrampolin true ist
                     playerTrampolin = true;
                     break;
+                case "JETPACK:":
+                    playerJetpack = true;
+                    break;
                 case "DEFAULT":
                     playerTrampolin = false;
+                    playerJetpack = false;
                     break;
             }
         }
