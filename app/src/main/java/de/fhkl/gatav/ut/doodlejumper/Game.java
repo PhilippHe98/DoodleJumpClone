@@ -13,6 +13,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.http.SslCertificate;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -76,6 +80,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     private SpawnManager spawnManager;
 
+    private static AudioAttributes attrs = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+
+    private static SoundPool soundPool = new SoundPool.Builder()
+                    .setMaxStreams(10)
+                    .setAudioAttributes(attrs)
+                    .build();
+
+    protected static int[] soundIds = new int[10];
+    private MediaPlayer backgroundMusic;
+
     private final GameLoop gameLoop;
 //    private ArrayList<PlatformWithPowerUp> platformsPowerUp = new ArrayList<PlatformWithPowerUp>();
 
@@ -96,11 +113,26 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+        //Init and start background music
+        backgroundMusic = MediaPlayer.create(context, R.raw.background);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.start();
+        //Init SoundPool
+        soundIds[0] = soundPool.load(context, R.raw.deathh, 1);
+        soundIds[1] = soundPool.load(context, R.raw.pain6,1);
+        soundIds[2] = soundPool.load(context, R.raw.gun_shot,1);
+        soundIds[3] = soundPool.load(context, R.raw.jetpack, 1);
+        soundIds[4] = soundPool.load(context, R.raw.powerup_pickup, 1);
+        soundIds[5] = soundPool.load(context, R.raw.trampolin_sound, 1);
+        soundIds[6] = soundPool.load(context, R.raw.jumppp11, 1);
+        soundIds[7] = soundPool.load(context, R.raw.movingshield_sound, 1);
+
         // get surface Holder and add callback
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
         gameLoop = new GameLoop(this, surfaceHolder);
+        soundPool.play(soundIds[8],1,1,1,-1,1);
 
 
         //Spritesheet ist das eigentliche Bild
@@ -178,9 +210,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         super.draw(canvas);
         switch(death){
             // wenn Spieler ausserhalb des Bildschirms ist
-            case 1: GameLoop.stopLoop(); drawGameOver(canvas); break;
+            case 1: GameLoop.stopLoop(); drawGameOver(canvas);
+                    backgroundMusic.pause();
+                    soundPool.play(soundIds[0], 1F,1F,1, 0,1.0F);
+                    break;
             // Spieler wurde von Gegner getroffen
-            case 2: GameLoop.stopLoop(); drawGameOver(canvas); break;
+            case 2: GameLoop.stopLoop();
+                    drawGameOver(canvas);
+                    backgroundMusic.pause();
+                    soundPool.play(soundIds[0], 1F,1F,1, 0,1.0F);
+                    break;
             default: if(canvas != null){
                 // Spielinhalte auf den Canvas zeichnen
                 if (isPaused) {
@@ -189,6 +228,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                     drawMainMenu(canvas);
                 } else{
                     drawGameContent(canvas);
+                    backgroundMusic.start();
                 }
                 getHolder().unlockCanvasAndPost(canvas);
             }
@@ -314,8 +354,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     }
 
     private void drawPauseMenu(Canvas canvas) {
-        // Hier kannst du das Pausemenü zeichnen
-        // Zum Beispiel: Text anzeigen
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(90);
@@ -324,8 +362,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     }
 
     private void drawMainMenu(Canvas canvas) {
-            // Hier kannst du das Hauptmenü zeichnen
-            // Zum Beispiel: Text anzeigen
             Paint paint = new Paint();
             paint.setColor(Color.WHITE);
             paint.setTextSize(90);
@@ -400,6 +436,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                         direction.normalize();
                         System.out.println(direction);
                         Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20,20);
+                        soundPool.play(soundIds[2], 1F,1F,1, 0,1.0F);
                         projectiles.add(projectile);
                         System.out.println("Feuer!");
                         break;
@@ -432,6 +469,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 if(Rectangle.isColliding(projectile, enemy)) {
                     enemiesToRemove.add(enemy);
                     projectilesToRemove.add(projectile);
+                    soundPool.play(soundIds[1], 1F,1F,1, 0,1.0F);
                 }
             }
         }
@@ -502,4 +540,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public Player getPlayer() {
         return player;
     }
+    public static SoundPool getSoundPool(){return soundPool;}
+    public static int[] getSoundIds(){ return soundIds;}
 }

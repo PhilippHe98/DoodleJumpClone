@@ -3,7 +3,6 @@ package de.fhkl.gatav.ut.doodlejumper.GameObject;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.location.GnssAntennaInfo;
 import android.media.MediaPlayer;
 
 import androidx.core.content.ContextCompat;
@@ -40,7 +39,7 @@ public class Player extends Rectangle {
     private final double JETPACK_VELOCITY = 50;
     private double jumpForce = DEFAULT_JUMP_FORCE;
 
-    MediaPlayer mediaPlayer;
+    MediaPlayer jumpSound;
 
     private PlayerState playerState = PlayerState.DEFAULT;
     private List<EventListener> listeners = new ArrayList<>();
@@ -57,12 +56,14 @@ public class Player extends Rectangle {
     private final Paint shieldPaint;
     private boolean isJetpack = false;
     private double jetpackDuration = MAX_JETPACK_DURATION;
+    private int[] soundIds;
 
 
     public Player(Context context, Vector2D position, double width, double height, Sprite sprite) {
         super(position, width, height, ContextCompat.getColor(context, R.color.magenta));
+        soundIds = Game.getSoundIds();
         velocity = new Vector2D(0, MAX_SPEED);
-        mediaPlayer = MediaPlayer.create(context, R.raw.jump_sound_cut);
+        jumpSound = MediaPlayer.create(context, R.raw.jumppp11);
         this.playerSprite = sprite;
 
         shieldPaint = new Paint();
@@ -87,15 +88,18 @@ public class Player extends Rectangle {
         // PowerUp Logik
         for(PowerUp powerUp: Game.powerUps) {
             if(isColliding(this, powerUp)) {
+                Game.getSoundPool().play(soundIds[4], 1F,1F,1, 0,1.0F);
                 if(powerUp.getClass().toString().contains("Schild")) {
                     isShielded = true;
                     shieldDuration = MAX_SHIELD_DURATION;
+                    Game.getSoundPool().play(soundIds[7], 1F,1F,1, 1,1.0F);
                     Game.addPowerUpToRemove(powerUp);
                 }
 
                 if(powerUp.getClass().toString().contains("Jetpack")){
                     isJetpack = true;
                     jetpackDuration = MAX_JETPACK_DURATION;
+                    Game.getSoundPool().play(soundIds[3], 1F,1F,1, 1,1.0F);
                     Game.addPowerUpToRemove(powerUp);
                 }
 
@@ -103,6 +107,7 @@ public class Player extends Rectangle {
                     if(!isJumping) {
                         if(powerUp.getClass().toString().contains("Trampolin")) {
                             setState(PlayerState.TRAMPOLIN);
+                            Game.getSoundPool().play(soundIds[5], 1F,1F,1, 0,1.0F);
                             counter = 0;
                             jumpForce = TRAMPOLIN_JUMP_FORCE;
                         }
@@ -118,7 +123,7 @@ public class Player extends Rectangle {
                     if (!isJumping) {
                         System.out.println("this: " + this.bottomRight.y + " other: "+ platform.topLeft.y);
                         velocity.y = -jumpForce;
-                        mediaPlayer.start();
+                        Game.getSoundPool().play(soundIds[6], 1,1,1,0,1);
                         // Zerstöre Plattform wenn richtiger Plattformtyp
                         if(platform.getClass().toString().contains("BreakablePlatform")) {
                             Game.addPlatformsToRemove(platform);
