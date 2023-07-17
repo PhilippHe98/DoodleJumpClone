@@ -164,9 +164,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         scorePaint.setTextSize(40);
         setFocusable(true);
 
+        textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(40);
+
 
         background = new Background(context,new Vector2D(540, 1088), 1080, 2177);
         spawnManager.setPlayer(player);
+        backgroundMusic.start();
     }
     /**
      * updatet kontinuierlich den Game State
@@ -225,9 +230,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                     drawMainMenu(canvas);
                 } else{
                     drawGameContent(canvas);
-                    backgroundMusic.start();
                 }
-                getHolder().unlockCanvasAndPost(canvas);
+//                getHolder().unlockCanvasAndPost(canvas);
             }
         }
     }
@@ -408,12 +412,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             powerUp.draw(canvas);
         }
         player.draw(canvas);
-        // Score
-        textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(40);
-        drawUPS(canvas);
-        drawFPS(canvas);
+
         canvas.drawText(""+score, 900, 50, textPaint);
     }
     @Override

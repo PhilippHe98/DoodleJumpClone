@@ -10,8 +10,8 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 public abstract class Platform extends Rectangle implements EventListener {
 
     protected Player player = null;
-    protected static final double DEFAULT_VERTICAL_SPEED = 1000.0 / GameLoop.MAX_UPS;
-    protected static final double TRAMPOLIN_VERTICAL_SPEED = 1700 / GameLoop.MAX_UPS;
+    protected static final double DEFAULT_VERTICAL_SPEED = 800.0 / GameLoop.MAX_UPS;
+    protected static final double TRAMPOLIN_VERTICAL_SPEED = 1500 / GameLoop.MAX_UPS;
     protected static double vertical_speed = DEFAULT_VERTICAL_SPEED;
     private static boolean moveDown;
 

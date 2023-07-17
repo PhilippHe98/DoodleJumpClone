@@ -21,8 +21,8 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 * */
 public abstract class PowerUp extends Rectangle implements EventListener {
 
-    protected static final double DEFAULT_VERTICAL_SPEED = 1000.0 / GameLoop.MAX_UPS;
-    protected static final double TRAMPOLIN_VERTICAL_SPEED = 1700/ GameLoop.MAX_UPS;
+    protected static final double DEFAULT_VERTICAL_SPEED = 800.0 / GameLoop.MAX_UPS;
+    protected static final double TRAMPOLIN_VERTICAL_SPEED = 1500/ GameLoop.MAX_UPS;
     protected double vertical_speed;
     private static boolean moveDown;
     protected Player player;
@@ -42,6 +42,8 @@ public abstract class PowerUp extends Rectangle implements EventListener {
     public static void setMoveDown(boolean b) {
         moveDown = b;
     }
+
+
 
     public void setPlayer(Player player) {
         if(this.player != null) {

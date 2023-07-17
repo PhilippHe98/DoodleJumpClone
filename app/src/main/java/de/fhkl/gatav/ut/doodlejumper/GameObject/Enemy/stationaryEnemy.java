@@ -30,4 +30,9 @@ public class stationaryEnemy extends Enemy {
         if(position.y > 2400) return;
         enemySprite.draw(canvas, topLeft, bottomRight);
     }
+
+    @Override
+    public Sprite getSprite() {
+        return enemySprite;
+    }
 }

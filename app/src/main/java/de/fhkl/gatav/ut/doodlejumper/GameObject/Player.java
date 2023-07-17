@@ -37,7 +37,7 @@ public class Player extends Rectangle {
     private boolean isJumping = false;
     private double gravityValue = 0.8;
     private final double DEFAULT_JUMP_FORCE = 35;
-    private final double TRAMPOLIN_JUMP_FORCE = 50;
+    private final double TRAMPOLIN_JUMP_FORCE = 60;
     private final double JETPACK_VELOCITY = 50;
     private double jumpForce = DEFAULT_JUMP_FORCE;
 
@@ -54,6 +54,8 @@ public class Player extends Rectangle {
 
     private Sprite playerSprite;
     private Sprite playerShieldedSprite;
+    private Sprite playerJumpingSprite;
+    private Sprite jetpackSprite;
     private boolean isShielded = false;
     private double shieldDuration = MAX_SHIELD_DURATION;
     private boolean isJetpack = false;
@@ -74,6 +76,12 @@ public class Player extends Rectangle {
 
         SpriteSheet spriteSheet = new SpriteSheet(context, R.drawable.jw_schutzschild);
         playerShieldedSprite = new Sprite(spriteSheet, new Rect(0,0,4245,4331));
+
+        spriteSheet = new SpriteSheet(context, R.drawable.jw_jumping);
+        playerJumpingSprite = new Sprite(spriteSheet, new Rect(0,0,2937,3716));
+
+        spriteSheet = new SpriteSheet(context, R.drawable.jetpack);
+        jetpackSprite = new Sprite(spriteSheet,new Rect(0,0,2291, 2363));
     }
 
     public void update() {
@@ -166,10 +174,21 @@ public class Player extends Rectangle {
 
     @Override
     public void draw(Canvas canvas) {
+        if(isJetpack) {
+            jetpackSprite.draw(canvas, new Vector2D(position.x - 100, position.y -100), new Vector2D(position.x + 100, position.y + 100));
+            this.width = 100;
+            playerSprite.draw(canvas, topLeft, bottomRight);
+            return;
+        }
         if(isShielded) {
             //breitenanpassen damit bild gescheit aussieht
             this.width = 189;
             playerShieldedSprite.draw(canvas, topLeft, bottomRight);
+            return;
+        }
+        if(isJumping) {
+            this.width = 145;
+            playerJumpingSprite.draw(canvas,topLeft,bottomRight);
             return;
         }
         this.width = 100;

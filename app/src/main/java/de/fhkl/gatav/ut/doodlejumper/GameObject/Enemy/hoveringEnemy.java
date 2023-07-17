@@ -47,4 +47,9 @@ public class hoveringEnemy extends Enemy {
         velocity.set(-PIXEL_PER_UPDATE, velocity.y);
     }
 
+
+    @Override
+    public Sprite getSprite() {
+        return enemySprite;
+    }
 }

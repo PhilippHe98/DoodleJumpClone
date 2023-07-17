@@ -3,11 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="visible"
+    android:background="#00BCD4"
+    android:backgroundTint="#F44336"
     tools:context=".MainActivity">
+    <!--    android:background="@drawable/hintergrund"-->
+    <!--    android:gravity="center"-->
+    <!--    android:orientation="vertical"-->
+    <!--    android:padding="10dp"-->
+</LinearLayout>
+
+
+
+
     <!--    <ImageView-->
     <!--        android:id="@+id/jwView"-->
     <!--        android:layout_width="match_parent"-->
@@ -119,5 +126,3 @@
     <!--        android:visibility="visible"-->
     <!--        app:srcCompat="@drawable/background"-->
     <!--        tools:visibility="visible" />-->
-
-</LinearLayout>

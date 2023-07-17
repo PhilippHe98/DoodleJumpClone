@@ -33,10 +33,10 @@ public class SpawnManager implements EventListener {
     private static List<PowerUp> powerUps = new ArrayList<>();
     Context context;
 
-    private static final int ENEMY_UPDATES_PER_SPAWN = 300;
+    private static final int ENEMY_UPDATES_PER_SPAWN = 450;
     private static int enemyUpdatesUntilNextSpawn;
 
-    private static final int PLATFORM_UPDATES_PER_SPAWN = 30;
+    private static final int PLATFORM_UPDATES_PER_SPAWN = 20;
     private static int platformUpdatesUntilNextSpawn;
 
     private static Player player;
@@ -88,7 +88,7 @@ public class SpawnManager implements EventListener {
                         break;
                     default: //case 3 und 4 -> macht stationary wahrscheinlicher
                         platforms.add(new StationaryPlatform(context, spawnPos, 150, 50));
-                        if(RandomGenerator.generateRandomInt(2) == 1) // 1/8 chance auf Powerup wenn Plattform spawnt
+                        if(RandomGenerator.generateRandomInt(6) == 1) // 1/5 chance auf Powerup wenn Plattform spawnt
                         generatePowerUp(new Vector2D(spawnPos.x, spawnPos.y - 60));
                         break;
                 }
