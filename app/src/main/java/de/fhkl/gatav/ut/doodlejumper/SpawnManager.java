@@ -33,7 +33,7 @@ public class SpawnManager implements EventListener {
     private static List<PowerUp> powerUps = new ArrayList<>();
     Context context;
 
-    private static final int ENEMY_UPDATES_PER_SPAWN = 30;
+    private static final int ENEMY_UPDATES_PER_SPAWN = 300;
     private static int enemyUpdatesUntilNextSpawn;
 
     private static final int PLATFORM_UPDATES_PER_SPAWN = 30;
@@ -43,18 +43,9 @@ public class SpawnManager implements EventListener {
     private static boolean playerTrampolin = false;
     private boolean playerJetpack = false;
 
-    private SpriteSheet hoveringEmemySpriteSheet;
-    private Sprite hoveringEnemySprite;
-    private SpriteSheet stationaryEnemySpriteSheet;
-    private Sprite stationaryEnemySprite;
-
 
     public SpawnManager(Context context) {
         this.context = context;
-        hoveringEmemySpriteSheet = new SpriteSheet(context, R.drawable.enemy2);
-        hoveringEnemySprite = new Sprite(hoveringEmemySpriteSheet, new Rect(0,0,2508,3602));
-        stationaryEnemySpriteSheet = new SpriteSheet(context, R.drawable.enemy1);
-        stationaryEnemySprite = new Sprite(stationaryEnemySpriteSheet, new Rect(0,0, 2508, 3602));
     }
 
     public void update() {
@@ -65,17 +56,17 @@ public class SpawnManager implements EventListener {
         spawnEnemies();
     }
 
-    private void generatePowerUp(Vector2D spawnPos, double width, double height) {
+    private void generatePowerUp(Vector2D spawnPos) {
         PowerUp powerUp;
         switch (RandomGenerator.generateRandomInt(3)) {
             case 1:
-                powerUp = new Schild(context, spawnPos, width, height);
+                powerUp = new Schild(context, spawnPos, 100, 100);
                 break;
             case 2:
-                powerUp = new Jetpack(context, spawnPos, width, height);
+                powerUp = new Jetpack(context, spawnPos, 100, 100);
                 break;
             default:
-                powerUp = new Trampolin(context, spawnPos, width, height);
+                powerUp = new Trampolin(context, spawnPos, 90, 50);
         }
         powerUp.setPlayer(player);
         powerUp.reactToEvent();
@@ -97,8 +88,8 @@ public class SpawnManager implements EventListener {
                         break;
                     default: //case 3 und 4 -> macht stationary wahrscheinlicher
                         platforms.add(new StationaryPlatform(context, spawnPos, 150, 50));
-                        if(RandomGenerator.generateRandomInt(9) == 1) // 1/8 chance auf Powerup wenn Plattform spawnt
-                        generatePowerUp(new Vector2D(spawnPos.x, spawnPos.y - 50), 50,50);
+                        if(RandomGenerator.generateRandomInt(2) == 1) // 1/8 chance auf Powerup wenn Plattform spawnt
+                        generatePowerUp(new Vector2D(spawnPos.x, spawnPos.y - 60));
                         break;
                 }
             }
@@ -106,7 +97,7 @@ public class SpawnManager implements EventListener {
     }
     private boolean checkSpawnPosition(Vector2D pos) {
         for (Platform platform: platforms) {
-            if(Math.abs(pos.y - platform.getPosition().y) <= 100) {
+            if(Math.abs(pos.y - platform.getPosition().y) <= 150) {
                 if(Math.abs(pos.x - platform.getPosition().x) < 300)
                     return false;
             }
@@ -129,17 +120,20 @@ public class SpawnManager implements EventListener {
 
     public void spawnEnemies(){
         //Spawn enemies when ready
-        if(readyToSpawnEnemy() && enemies.size() < MAX_ENEMIES) {
-            switch(RandomGenerator.generateRandomInt(3)){
+        Enemy enemy = null;
+        if(readyToSpawnEnemy()) {
+            switch(RandomGenerator.generateRandomInt(2)){
                 case 0 :
-                    enemies.add(new stationaryEnemy(context ,new Vector2D((Math.random()*1000),-400),120, 185, stationaryEnemySprite));
+                    enemy = new stationaryEnemy(context ,new Vector2D((Math.random()*1000),-400),100, 182);
                     break;
                 case 1 :
-                    enemies.add(new hoveringEnemy(context, new Vector2D((Math.random()*1000), -400),120, 185, hoveringEnemySprite));
+                    enemy = new hoveringEnemy(context, new Vector2D((Math.random()*1000), -400),100, 182);
                     break;
                 default:
-
             }
+            enemy.setPlayer(player);
+            enemy.reactToEvent();
+            enemies.add(enemy);
         }
     }
 

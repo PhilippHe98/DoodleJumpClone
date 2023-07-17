@@ -26,7 +26,7 @@ public class Background extends Rectangle implements EventListener {
     public Background(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.blue));
 
-        SpriteSheet backgroundSpriteSheet = new SpriteSheet(context, R.drawable.background);
+        SpriteSheet backgroundSpriteSheet = new SpriteSheet(context, R.drawable.hintergrund);
         backgroundSprite = new Sprite(backgroundSpriteSheet, new Rect(0,0,4688,10146));
     }
 
@@ -37,15 +37,11 @@ public class Background extends Rectangle implements EventListener {
 
     @Override
     public void draw(Canvas canvas) {
-        backgroundSprite.draw(canvas, topLeft, bottomRight);
+//        backgroundSprite.draw(canvas, topLeft, bottomRight);
     }
 
     protected void moveDown() {
-        if(moveDown) velocity.set(velocity.x, vertical_speed);
-        if(!moveDown) velocity.set(velocity.x, 0);
 
-        position.add(velocity);
-        calculateNewTopLeftAndBottomRight();
     }
 
     public static void setMoveDown(boolean b) {

@@ -3,6 +3,7 @@ package de.fhkl.gatav.ut.doodlejumper.GameObject;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 
 import androidx.core.content.ContextCompat;
@@ -16,6 +17,7 @@ import de.fhkl.gatav.ut.doodlejumper.GameLoop;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
 import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.SpriteSheet;
 import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
@@ -51,24 +53,27 @@ public class Player extends Rectangle {
     private static int counter = 0;
 
     private Sprite playerSprite;
+    private Sprite playerShieldedSprite;
     private boolean isShielded = false;
     private double shieldDuration = MAX_SHIELD_DURATION;
-    private final Paint shieldPaint;
     private boolean isJetpack = false;
     private double jetpackDuration = MAX_JETPACK_DURATION;
     private int[] soundIds;
 
 
-    public Player(Context context, Vector2D position, double width, double height, Sprite sprite) {
+    public Player(Context context, Vector2D position, double width, double height) {
         super(position, width, height, ContextCompat.getColor(context, R.color.magenta));
         soundIds = Game.getSoundIds();
         velocity = new Vector2D(0, MAX_SPEED);
         jumpSound = MediaPlayer.create(context, R.raw.jumppp11);
-        this.playerSprite = sprite;
 
-        shieldPaint = new Paint();
-        shieldPaint.setColor(ContextCompat.getColor(context, R.color.Schild));
-        shieldPaint.setStyle(Paint.Style.STROKE);
+        //Spritesheet ist das eigentliche Bild
+        SpriteSheet playerSpriteSheet = new SpriteSheet(context, R.drawable.jw_normal);
+        //Sprite gibt dem Spritesheet einen Rahmen (Dimension in Pixeln) und ist für das Zeichnen verantwortlich
+        playerSprite = new Sprite(playerSpriteSheet, new Rect(0,0,2026,3838));
+
+        SpriteSheet spriteSheet = new SpriteSheet(context, R.drawable.jw_schutzschild);
+        playerShieldedSprite = new Sprite(spriteSheet, new Rect(0,0,4245,4331));
     }
 
     public void update() {
@@ -82,16 +87,16 @@ public class Player extends Rectangle {
 
         if(position.y < 1300) position.set(position.x, 1300);
 
-        if (velocity.y > 1) isJumping = false;
-        if (velocity.y <= 1) isJumping = true;
+        if (velocity.y > 0) isJumping = false;
+        if (velocity.y <= 0) isJumping = true;
 
         // PowerUp Logik
         for(PowerUp powerUp: Game.powerUps) {
             if(isColliding(this, powerUp)) {
-                Game.getSoundPool().play(soundIds[4], 1F,1F,1, 0,1.0F);
                 if(powerUp.getClass().toString().contains("Schild")) {
                     isShielded = true;
                     shieldDuration = MAX_SHIELD_DURATION;
+                    Game.getSoundPool().play(soundIds[4], 1F,1F,1, 0,1.0F);
                     Game.getSoundPool().play(soundIds[7], 1F,1F,1, 1,1.0F);
                     Game.addPowerUpToRemove(powerUp);
                 }
@@ -99,6 +104,7 @@ public class Player extends Rectangle {
                 if(powerUp.getClass().toString().contains("Jetpack")){
                     isJetpack = true;
                     jetpackDuration = MAX_JETPACK_DURATION;
+                    Game.getSoundPool().play(soundIds[4], 1F,1F,1, 0,1.0F);
                     Game.getSoundPool().play(soundIds[3], 1F,1F,1, 1,1.0F);
                     Game.addPowerUpToRemove(powerUp);
                 }
@@ -107,9 +113,10 @@ public class Player extends Rectangle {
                     if(!isJumping) {
                         if(powerUp.getClass().toString().contains("Trampolin")) {
                             setState(PlayerState.TRAMPOLIN);
-                            Game.getSoundPool().play(soundIds[5], 1F,1F,1, 0,1.0F);
                             counter = 0;
                             jumpForce = TRAMPOLIN_JUMP_FORCE;
+                            Game.getSoundPool().play(soundIds[5], 1F, 1F, 1, 0, 1.0F);
+                            Game.addPowerUpToRemove(powerUp);
                         }
                     }
                 }
@@ -119,9 +126,8 @@ public class Player extends Rectangle {
         // Kollisionen resetten den Jump Timer
         for (Platform platform : Game.platforms) {
             if (isColliding(this, platform)) {
-                if(this.bottomRight.y -5 > platform.topLeft.y) {
+                if(this.bottomRight.y > platform.topLeft.y) {
                     if (!isJumping) {
-                        System.out.println("this: " + this.bottomRight.y + " other: "+ platform.topLeft.y);
                         velocity.y = -jumpForce;
                         Game.getSoundPool().play(soundIds[6], 1,1,1,0,1);
                         // Zerstöre Plattform wenn richtiger Plattformtyp
@@ -161,8 +167,12 @@ public class Player extends Rectangle {
     @Override
     public void draw(Canvas canvas) {
         if(isShielded) {
-            canvas.drawRect((float) topLeft.x, (float) topLeft.y, (float) bottomRight.x, (float) bottomRight.y, shieldPaint);
+            //breitenanpassen damit bild gescheit aussieht
+            this.width = 189;
+            playerShieldedSprite.draw(canvas, topLeft, bottomRight);
+            return;
         }
+        this.width = 100;
         playerSprite.draw(canvas, topLeft, bottomRight);
     }
 

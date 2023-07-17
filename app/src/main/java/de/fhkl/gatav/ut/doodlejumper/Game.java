@@ -103,6 +103,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private boolean GameOverScreenVisible;
 
     private Background background;
+    private Paint textPaint;
 
 
     public Game(Context context) {
@@ -135,12 +136,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         soundPool.play(soundIds[8],1,1,1,-1,1);
 
 
-        //Spritesheet ist das eigentliche Bild
-        SpriteSheet playerSpriteSheet = new SpriteSheet(context, R.drawable.jw_normal);
-        //Sprite gibt dem Spritesheet einen Rahmen (Dimension in Pixeln) und ist für das Zeichnen verantwortlich
-        Sprite playerSprite = new Sprite(playerSpriteSheet, new Rect(0,0,3009,3716));
         //Init Player, height 100 und width 123 haben das selbe verhältnis wie die 3009x3716 bei den Spritepixeln
-        player = new Player(getContext(), playerPosition, 150,185, playerSprite);
+        player = new Player(getContext(), playerPosition, 100,189);
 
         spawnManager = new SpawnManager(getContext());
 
@@ -270,7 +267,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 addPlatformsToRemove(platform);
             }
         }
-
     }
 
     public static void addPlatformsToRemove(Platform platform) {
@@ -286,10 +282,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     private void removeEnemies() {
         for (Enemy enemy: enemiesToRemove) {
+            enemy.removeListener();
             enemies.remove(enemy);
         }
     }
-
 
     public static void addPowerUpToRemove(PowerUp powerUp) {
         powerUpsToRemove.add(powerUp);
@@ -397,12 +393,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         super.draw(canvas);
         background.draw(canvas);
 
-        for(Enemy enemy : enemies){
-            enemy.draw(canvas);
-        }
         for (Platform platform: platforms) {
             platform.draw(canvas);
         }
+
+        for(Enemy enemy : enemies){
+            enemy.draw(canvas);
+        }
+
         for(Projectile projectile: projectiles) {
             projectile.draw(canvas);
         }
@@ -411,12 +409,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
         player.draw(canvas);
         // Score
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(40);
+        textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(40);
         drawUPS(canvas);
         drawFPS(canvas);
-        canvas.drawText(""+score, 900, 50, paint);
+        canvas.drawText(""+score, 900, 50, textPaint);
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -478,7 +476,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void drawUPS(Canvas canvas) {
         String averageUPS = Double.toString(gameLoop.getAverageUPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.black);
+        int color = ContextCompat.getColor(getContext(), R.color.white);
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("UPS: " + averageUPS,100, 100, paint);
@@ -487,7 +485,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void drawFPS(Canvas canvas) {
         String averageFPS = Double.toString(gameLoop.getAverageFPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.black);
+        int color = ContextCompat.getColor(getContext(), R.color.white);
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("FPS: " + averageFPS,100, 200, paint);

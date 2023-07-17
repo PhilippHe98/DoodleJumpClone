@@ -15,6 +15,7 @@ public class Sprite {
     }
 
     public void draw(Canvas canvas, Vector2D topLeft, Vector2D bottomRight) {
+        if(topLeft.y > 2400) return;
         canvas.drawBitmap(spriteSheet.getBitmap(),
                 rect,
                 new Rect((int) topLeft.x, (int) topLeft.y, (int) bottomRight.x, (int) bottomRight.y),

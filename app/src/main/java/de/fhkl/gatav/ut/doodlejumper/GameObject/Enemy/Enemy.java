@@ -17,20 +17,13 @@ public abstract class Enemy extends Rectangle implements EventListener {
     protected double vertical_speed;
     protected static boolean moveDown = false;
 
-    protected Sprite enemySprite;
 
     protected Player player;
 
-    public Enemy(Vector2D position, double width, double height, int color, Sprite sprite) {
+    public Enemy(Vector2D position, double width, double height, int color) {
         super(position, width, height, color);
-        this.enemySprite = sprite;
     }
 
-    @Override
-    public void draw(Canvas canvas) {
-        canvas.drawRect((float)topLeft.x, (float) topLeft.y, (float) bottomRight.x,(float) bottomRight.y, paint);
-        enemySprite.draw(canvas, topLeft, bottomRight);
-    }
     protected void moveDown() {
         if(moveDown) velocity.set(velocity.x, vertical_speed);
         if(!moveDown) velocity.set(velocity.x, 0);

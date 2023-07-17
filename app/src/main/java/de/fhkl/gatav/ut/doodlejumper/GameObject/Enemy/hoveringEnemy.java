@@ -1,11 +1,14 @@
 package de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import androidx.core.content.ContextCompat;
 
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
 import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
+import de.fhkl.gatav.ut.doodlejumper.Graphics.SpriteSheet;
 import de.fhkl.gatav.ut.doodlejumper.R;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
@@ -18,8 +21,10 @@ public class hoveringEnemy extends Enemy {
 
     private Sprite enemySprite;
 
-    public hoveringEnemy(Context context, Vector2D position, double width, double height, Sprite enemySprite) {
-        super(position, width, height, ContextCompat.getColor(context, R.color.white), enemySprite);
+    public hoveringEnemy(Context context, Vector2D position, double width, double height) {
+        super(position, width, height, ContextCompat.getColor(context, R.color.white));
+        SpriteSheet spriteSheet = new SpriteSheet(context, R.drawable.enemy2);
+        enemySprite = new Sprite(spriteSheet, new Rect(0,0,1985,3771));
     }
 
     @Override
@@ -27,6 +32,11 @@ public class hoveringEnemy extends Enemy {
         if(position.x < 0) moveRight();
         if(position.x > 1000) moveLeft();
         moveDown();
+    }
+    @Override
+    public void draw(Canvas canvas) {
+        if(position.y > 2400) return;
+        enemySprite.draw(canvas, topLeft, bottomRight);
     }
 
     private void moveRight() {
