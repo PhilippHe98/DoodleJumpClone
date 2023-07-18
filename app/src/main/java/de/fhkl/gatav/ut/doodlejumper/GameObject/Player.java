@@ -34,9 +34,10 @@ public class Player extends Rectangle {
     private static final double SIDE_MOVE_SPEED = 300.0 / GameLoop.MAX_UPS;
     private static final double MAX_SHIELD_DURATION = 700;
     private final double MAX_JETPACK_DURATION = 500;
+
     private boolean isJumping = false;
     private double gravityValue = 0.8;
-    private final double DEFAULT_JUMP_FORCE = 35;
+    private final double DEFAULT_JUMP_FORCE = 38;
     private final double TRAMPOLIN_JUMP_FORCE = 60;
     private final double JETPACK_VELOCITY = 50;
     private double jumpForce = DEFAULT_JUMP_FORCE;
@@ -56,6 +57,13 @@ public class Player extends Rectangle {
     private Sprite playerShieldedSprite;
     private Sprite playerJumpingSprite;
     private Sprite jetpackSprite;
+    private Sprite gunLeftSprite;
+    private Sprite gunRightSprite;
+    private Sprite gunRightJumpSprite;
+    private Sprite gunLeftJumpSprite;
+
+    private boolean shootLeft;
+    private boolean shootRight;
     private boolean isShielded = false;
     private double shieldDuration = MAX_SHIELD_DURATION;
     private boolean isJetpack = false;
@@ -82,6 +90,18 @@ public class Player extends Rectangle {
 
         spriteSheet = new SpriteSheet(context, R.drawable.jetpack);
         jetpackSprite = new Sprite(spriteSheet,new Rect(0,0,2291, 2363));
+
+        spriteSheet = new SpriteSheet(context, R.drawable.waffe_links_nicht_springend);
+        gunLeftSprite = new Sprite(spriteSheet, new Rect(0,0,2590, 3838));
+
+        spriteSheet = new SpriteSheet(context, R.drawable.waffe_rechts_nicht_springend);
+        gunRightSprite = new Sprite(spriteSheet, new Rect(0,0,2602,3838));
+
+        spriteSheet = new SpriteSheet(context, R.drawable.waffe_rechts_springend);
+        gunRightJumpSprite = new Sprite(spriteSheet, new Rect(0,0,2506,3716));
+
+        spriteSheet = new SpriteSheet(context, R.drawable.waffe_links_springed);
+        gunLeftJumpSprite = new Sprite(spriteSheet, new Rect(0,0,2493,3716));
     }
 
     public void update() {
@@ -176,8 +196,24 @@ public class Player extends Rectangle {
     public void draw(Canvas canvas) {
         if(isJetpack) {
             jetpackSprite.draw(canvas, new Vector2D(position.x - 100, position.y -100), new Vector2D(position.x + 100, position.y + 100));
+            if(shootLeft) {
+                gunLeftJumpSprite.draw(canvas,topLeft,bottomRight);
+                return;
+            }
+            if (shootRight) {
+                gunRightJumpSprite.draw(canvas,topLeft,bottomRight);
+                return;
+            }
             this.width = 100;
             playerSprite.draw(canvas, topLeft, bottomRight);
+            return;
+        }
+        if(shootLeft) {
+            gunLeftJumpSprite.draw(canvas,topLeft,bottomRight);
+            return;
+        }
+        if (shootRight) {
+            gunRightJumpSprite.draw(canvas,topLeft,bottomRight);
             return;
         }
         if(isShielded) {
@@ -241,5 +277,13 @@ public class Player extends Rectangle {
 
     public boolean isShielded() {
         return isShielded;
+    }
+
+    public void setShootLeft(boolean b) {
+        shootLeft = b;
+    }
+
+    public void setShootRight(boolean b) {
+        shootRight = b;
     }
 }

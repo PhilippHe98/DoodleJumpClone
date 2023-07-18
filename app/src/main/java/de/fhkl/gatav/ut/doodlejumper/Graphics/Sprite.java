@@ -9,7 +9,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 public class Sprite {
     private final SpriteSheet spriteSheet;
     private final Rect rect;
-
+    private Rect dest = new Rect();
     private Bitmap cachedBitmap; // Zwischengespeicherte Bitmap
 
     public Sprite(SpriteSheet spriteSheet, Rect rect) {
@@ -21,13 +21,14 @@ public class Sprite {
         if(topLeft.y > 2400) return;
         /*Bitmap-Caching: Wenn du häufig dieselbe Bitmap zeichnest, kannst du die skalierte Version zwischenspeichern,
          anstatt sie bei jedem Frame neu zu skalieren. Dies kann die Leistung verbessern, indem die erforderliche Verarbeitung reduziert wird.*/
+        // Stelle sicher, dass cachedBitmap die skalierte Version enthält
         if (cachedBitmap == null) {
-            // Skalierte Bitmap erstellen, falls noch nicht zwischengespeichert
-            cachedBitmap = Bitmap.createBitmap(spriteSheet.getBitmap());
+            cachedBitmap = Bitmap.createScaledBitmap(spriteSheet.getBitmap(), spriteSheet.getBitmap().getWidth(), (int) spriteSheet.getBitmap().getHeight(), true);
         }
+        dest.set((int) topLeft.x, (int) topLeft.y, (int) bottomRight.x, (int) bottomRight.y);
         canvas.drawBitmap(cachedBitmap,
                 rect,
-                new Rect((int) topLeft.x, (int) topLeft.y, (int) bottomRight.x, (int) bottomRight.y),
+                dest,
                 null);
     }
 }

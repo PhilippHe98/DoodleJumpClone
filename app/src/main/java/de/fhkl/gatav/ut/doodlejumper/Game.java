@@ -99,7 +99,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private boolean isMainMenuVisible = true;
     private boolean isPaused = false;
     protected static Context context;
-    private Vector2D deathLine = new Vector2D(2400);
+    private Vector2D deathLine = new Vector2D(2500);
     private boolean GameOverScreenVisible;
 
     private Background background;
@@ -231,7 +231,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 } else{
                     drawGameContent(canvas);
                 }
-//                getHolder().unlockCanvasAndPost(canvas);
             }
         }
     }
@@ -267,7 +266,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for (Platform platform: platforms) {
             platform.update();
             //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
-            if(platform.getPosition().y > 2000) {
+            if(platform.getPosition().y > 2400) {
                 addPlatformsToRemove(platform);
             }
         }
@@ -311,7 +310,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         for (Enemy enemy: enemies) {
             enemy.update();
             //Wenn Plattform ausheralb des Bildschirms ist-> zum zerstören Vormerken
-            if(enemy.getPosition().y > 2500) {
+            if(enemy.getPosition().y > 2400) {
                 enemiesToRemove.add(enemy);
             }
         }
@@ -412,6 +411,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             powerUp.draw(canvas);
         }
         player.draw(canvas);
+        drawFPS(canvas);
+        drawUPS(canvas);
 
         canvas.drawText(""+score, 900, 50, textPaint);
     }
@@ -436,6 +437,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                         soundPool.play(soundIds[2], 1F,1F,1, 0,1.0F);
                         projectiles.add(projectile);
                         System.out.println("Feuer!");
+                        if(event.getX() - player.getPosition().x > 0) {
+                            player.setShootRight(true);
+                            player.setShootLeft(false);
+                        } else {
+                            player.setShootRight(false);
+                            player.setShootLeft(true);
+
+                        }
                         break;
                 }
                 return true;
@@ -475,7 +484,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void drawUPS(Canvas canvas) {
         String averageUPS = Double.toString(gameLoop.getAverageUPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.white);
+        int color = ContextCompat.getColor(getContext(), R.color.black);
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("UPS: " + averageUPS,100, 100, paint);
@@ -484,7 +493,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public void drawFPS(Canvas canvas) {
         String averageFPS = Double.toString(gameLoop.getAverageFPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.white);
+        int color = ContextCompat.getColor(getContext(), R.color.black);
         paint.setColor(color);
         paint.setTextSize(50);
         canvas.drawText("FPS: " + averageFPS,100, 200, paint);

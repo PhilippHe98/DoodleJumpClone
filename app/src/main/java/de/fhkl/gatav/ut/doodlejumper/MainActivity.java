@@ -14,11 +14,13 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 
 /**
  * MainActivity is the entry point of out application
  */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private Game game;
     public static int displayHeight;

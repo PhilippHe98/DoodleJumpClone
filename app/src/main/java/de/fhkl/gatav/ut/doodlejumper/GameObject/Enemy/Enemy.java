@@ -12,8 +12,8 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public abstract class Enemy extends Rectangle implements EventListener {
 
-    protected static final double DEFAULT_VERTICAL_SPEED = 800.0 / GameLoop.MAX_UPS;
-    protected static final double TRAMPOLIN_VERTICAL_SPEED = 1500 / GameLoop.MAX_UPS;
+    protected static final double DEFAULT_VERTICAL_SPEED = 600.0 / GameLoop.MAX_UPS;
+    protected static final double TRAMPOLIN_VERTICAL_SPEED = 1400 / GameLoop.MAX_UPS;
     protected double vertical_speed;
 
     protected static boolean moveDown = false;

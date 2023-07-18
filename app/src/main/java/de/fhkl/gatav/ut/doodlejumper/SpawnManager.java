@@ -36,7 +36,7 @@ public class SpawnManager implements EventListener {
     private static final int ENEMY_UPDATES_PER_SPAWN = 450;
     private static int enemyUpdatesUntilNextSpawn;
 
-    private static final int PLATFORM_UPDATES_PER_SPAWN = 20;
+    private static final int PLATFORM_UPDATES_PER_SPAWN = 15;
     private static int platformUpdatesUntilNextSpawn;
 
     private static Player player;
