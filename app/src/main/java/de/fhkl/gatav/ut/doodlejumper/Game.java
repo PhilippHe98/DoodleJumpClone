@@ -96,7 +96,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private Background background;
     private Paint textPaint;
     private boolean isPlayed = false;
-
+    private boolean playShootSound = false;
 
 
     public Game(Context context) {
@@ -418,15 +418,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     public boolean onTouchEvent(MotionEvent event) {
         // Handle touch event actions
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (isMainMenuVisible) {
-                // Starte das Spiel, wenn der Bildschirm berührt wird und das Hauptmenü sichtbar ist
-                isMainMenuVisible = false;
-            }
             Vector2D direction = new Vector2D(event.getX(), event.getY()).subtract(playerPosition);
             direction.normalize();
             System.out.println(direction);
             Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20, 20);
-            soundPool.play(soundIds[2], 1F, 1F, 1, 0, 1.0F);
             projectiles.add(projectile);
             System.out.println("Feuer!");
             if (event.getX() - player.getPosition().x > 0) {
@@ -437,7 +432,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 player.setShootLeft(true);
             }
         }
-
+        if (playShootSound) {
+            soundPool.play(soundIds[2], 1F, 1F, 1, 0, 1.0F);
+        }
+        if (isMainMenuVisible) {
+            // Starte das Spiel, wenn der Bildschirm berührt wird und das Hauptmenü sichtbar ist
+            isMainMenuVisible = false;
+            playShootSound = true;
+        }
         return super.onTouchEvent(event);
     }
 
@@ -470,21 +472,21 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     }
 
     public void drawUPS(Canvas canvas) {
-        String averageUPS = Double.toString(gameLoop.getAverageUPS());
+        String averageUPS = Double.toString((int) gameLoop.getAverageUPS());
         Paint paint = new Paint();
         int color = ContextCompat.getColor(getContext(), R.color.black);
         paint.setColor(color);
-        paint.setTextSize(50);
-        canvas.drawText("UPS: " + averageUPS,100, 100, paint);
+        paint.setTextSize(35);
+        canvas.drawText("UPS: " + averageUPS,100, 50, paint);
     }
 
     public void drawFPS(Canvas canvas) {
-        String averageFPS = Double.toString(gameLoop.getAverageFPS());
+        String averageFPS = Double.toString((int) gameLoop.getAverageFPS());
         Paint paint = new Paint();
         int color = ContextCompat.getColor(getContext(), R.color.black);
         paint.setColor(color);
-        paint.setTextSize(50);
-        canvas.drawText("FPS: " + averageFPS,100, 200, paint);
+        paint.setTextSize(35);
+        canvas.drawText("FPS: " + averageFPS,100, 100, paint);
     }
 
     private void processSensorData(float accelerationX) {
