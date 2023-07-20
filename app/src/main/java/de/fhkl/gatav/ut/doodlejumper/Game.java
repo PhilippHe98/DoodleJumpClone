@@ -1,40 +1,36 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Picture;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.net.http.SslCertificate;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Background;
-import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;
-import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.hoveringEnemy;
+import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.Enemy;;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.Platform;
 
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Platform.StationaryPlatform;
@@ -42,9 +38,6 @@ import de.fhkl.gatav.ut.doodlejumper.GameObject.Player;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.PowerUp.PowerUp;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Projectile;
 import de.fhkl.gatav.ut.doodlejumper.GameObject.Rectangle;
-import de.fhkl.gatav.ut.doodlejumper.GameObject.Enemy.stationaryEnemy;
-import de.fhkl.gatav.ut.doodlejumper.Graphics.Sprite;
-import de.fhkl.gatav.ut.doodlejumper.Graphics.SpriteSheet;
 import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 /**
@@ -53,7 +46,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
 
     private int score = 0;
-    public int death = 0;
+    public boolean death;
     private Paint scorePaint = new Paint();
 
     private final Player player;
@@ -74,8 +67,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     /**
      * Sensoren und Manager um die Neigung zu handlen
      */
-    private SensorManager sensorManager;
-    private Sensor accelerometer;   //Deutsch: Beschleunigungsmesser
+    private final SensorManager sensorManager;
+    private final Sensor accelerometer;   //Deutsch: Beschleunigungsmesser
     private float accelerationX;
 
     private SpawnManager spawnManager;
@@ -91,7 +84,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                     .build();
 
     protected static int[] soundIds = new int[10];
-    private MediaPlayer backgroundMusic;
+    private final MediaPlayer backgroundMusic;
 
     private final GameLoop gameLoop;
 //    private ArrayList<PlatformWithPowerUp> platformsPowerUp = new ArrayList<PlatformWithPowerUp>();
@@ -99,11 +92,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     private boolean isMainMenuVisible = true;
     private boolean isPaused = false;
     protected static Context context;
-    private Vector2D deathLine = new Vector2D(2500);
-    private boolean GameOverScreenVisible;
 
     private Background background;
     private Paint textPaint;
+    private boolean isPlayed = false;
+
 
 
     public Game(Context context) {
@@ -169,9 +162,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         textPaint.setTextSize(40);
 
 
-        background = new Background(context,new Vector2D(540, 1088), 1080, 2177);
+        background = new Background(context,new Vector2D(540, 1088), 1080, 2400);
         spawnManager.setPlayer(player);
         backgroundMusic.start();
+        isPlayed = false;
+        death = false;
+
     }
     /**
      * updatet kontinuierlich den Game State
@@ -208,32 +204,35 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
 
     @Override
     public void draw(Canvas canvas) {
-        // Umschreiben zu Switch Case mit death als Variable um Todesfälle zu unterscheiden.
+        Intent intent = new Intent(context, GameOver.class);
         super.draw(canvas);
-        switch(death){
-            // wenn Spieler ausserhalb des Bildschirms ist
-            case 1: GameLoop.stopLoop(); drawGameOver(canvas);
-                    backgroundMusic.pause();
-                    soundPool.play(soundIds[0], 1F,1F,1, 0,1.0F);
-                    break;
-            // Spieler wurde von Gegner getroffen
-            case 2: GameLoop.stopLoop();
-                    drawGameOver(canvas);
-                    backgroundMusic.pause();
-                    soundPool.play(soundIds[0], 1F,1F,1, 0,1.0F);
-                    break;
-            default: if(canvas != null){
-                // Spielinhalte auf den Canvas zeichnen
-                if (isPaused) {
-                    drawPauseMenu(canvas);
-                } else if (isMainMenuVisible) {
-                    drawMainMenu(canvas);
-                } else{
-                    drawGameContent(canvas);
+        if(death) {
+                intent.putExtra("score", score);
+                ((Activity) context).finish();
+                context.startActivity(intent);
+                backgroundMusic.pause();
+                soundPool.setVolume(2,0,0);
+                soundPool.setVolume(6,0,0);
+                if (!isPlayed) {
+                    soundPool.play(soundIds[0], 0.5F, 0.5F, 1, 0, 1.0F);
+                    isPlayed = true;
                 }
-            }
-        }
-    }
+                        }else if (canvas != null) {
+                                    // Spielinhalte auf den Canvas zeichnen
+                                    drawGameContent(canvas);
+                                    if (isPaused) {
+                                        drawPauseMenu(canvas);
+                                    } else if (isMainMenuVisible) {
+                                        drawMainMenu(canvas);
+                                    }
+
+
+                                }
+
+                }
+
+
+
 
     private void updatePowerUps() {
         ArrayList<PowerUp> powerUpsToRemove = new ArrayList<>();
@@ -335,21 +334,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         }
     }
 
-    private boolean checkGameOver() {
-        double playerPosy = player.getPosition().y;
-        if (playerPosy > deathLine.y) {
-            death = 1;
-            return true;
+    private void checkGameOver() {
+        Vector2D position = player.getPosition();
+        if(position.y > 2700){
+            death = true;
         }
         for (Enemy enemy: enemies) {
             if(Rectangle.isColliding(player,enemy)) {
                 if(!player.isShielded()) {
-                    death = 2;
-                    return true;
+                    death = true;
+
                 }
             }
         }
-        return false;
     }
 
     private void drawPauseMenu(Canvas canvas) {
@@ -361,35 +358,36 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
     }
 
     private void drawMainMenu(Canvas canvas) {
-            Paint paint = new Paint();
-            paint.setColor(Color.WHITE);
-            paint.setTextSize(90);
-            paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("Jumping John", canvas.getWidth() / 2f, canvas.getHeight() / 7f, paint);
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int screenWidthMenu = displayMetrics.widthPixels;
+        int screenHeightMenu = displayMetrics.heightPixels;
+        int desiredWidth = (int) (screenWidthMenu * 0.52); // 45% der Bildschirmbreite
+        int desiredHeight = (int) (screenHeightMenu * 0.4); //40% der Höhe
+        int color = Color.rgb(245,245,220); //beige
 
-            Paint paint2 = new Paint();
-            paint2.setColor(Color.WHITE);
-            paint2.setTextSize(60);
-            paint2.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText("TAP TO PLAY", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint2);
+        Bitmap jw = BitmapFactory.decodeResource(getResources(), R.drawable.waffe_links_nicht_springend);
+        Bitmap scaledjw = Bitmap.createScaledBitmap(jw,desiredWidth, desiredHeight,false);
+        Paint startScreen = new Paint();
+        Paint startScreenSmall = new Paint();
+
+        startScreen.setTypeface(Typeface.DEFAULT_BOLD);
+        startScreen.setColor(Color.BLACK);
+        startScreen.setTextSize(90);
+        startScreen.setTextAlign(Paint.Align.CENTER);
+
+        startScreenSmall.setColor(Color.BLACK);
+        startScreenSmall.setTextSize(50);
+        startScreenSmall.setTextAlign(Paint.Align.CENTER);
+        startScreenSmall.setTypeface(Typeface.DEFAULT_BOLD);
+
+
+        int left = (screenWidthMenu - scaledjw.getWidth()) / 2;
+        int top = (screenHeightMenu - scaledjw.getHeight()) / 2;
+        canvas.drawColor(color);
+        canvas.drawBitmap(scaledjw, left, top, null);
+        canvas.drawText("Jumping Wick", canvas.getWidth() / 2f, canvas.getHeight() / 7f, startScreen);
+        canvas.drawText("Antippen zum Starten!", canvas.getWidth() / 2f, canvas.getHeight() / 1.2f, startScreenSmall);
         }
-    private void drawGameOver(Canvas canvas) {
-        GameOverScreenVisible = true;
-
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(90);
-        paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("GAME OVER!", canvas.getWidth() / 2f, canvas.getHeight() / 2f, paint);
-
-        Paint paint2 = new Paint();
-        paint2.setColor(Color.WHITE);
-        paint2.setTextSize(65);
-        paint2.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText("Dein Score ist: " + score, canvas.getWidth()/2f, canvas.getHeight()/1.5f, paint2);
-
-        canvas.drawText("Tap to Play Again", canvas.getWidth()/2f, canvas.getHeight()/1.4f, paint2);
-    }
 
     private void drawGameContent(Canvas canvas) {
         // Was oben steht wird zuerst gerendert, kann also vom unten stehenden Objekten überlagert werden
@@ -423,9 +421,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
             if (isMainMenuVisible) {
                 // Starte das Spiel, wenn der Bildschirm berührt wird und das Hauptmenü sichtbar ist
                 isMainMenuVisible = false;
-            } else if(GameOverScreenVisible){
-                GameOverScreenVisible = false;
             }
+        }
             else {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
@@ -449,7 +446,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 }
                 return true;
             }
-        }
+
         return super.onTouchEvent(event);
     }
 

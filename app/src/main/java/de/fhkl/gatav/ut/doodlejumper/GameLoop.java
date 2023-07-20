@@ -43,6 +43,7 @@ public class GameLoop extends Thread {
                 canvas = surfaceHolder.lockCanvas();
                 // prohibits other threads from calling update methods from the SurfaceHolder
                 synchronized (surfaceHolder) {
+
                     game.update();
                     //increase updateCount immediately
                     updateCount++;

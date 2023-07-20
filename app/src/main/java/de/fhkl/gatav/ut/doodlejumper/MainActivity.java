@@ -1,21 +1,13 @@
 package de.fhkl.gatav.ut.doodlejumper;
 
-
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 
 /**
  * MainActivity is the entry point of out application
@@ -41,13 +33,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Set content view to game, so that objects in the game class can be rendered to the screen
         //Äquivalent zu GameView Klassen wie aus Tutorials bekannt
         game = new Game(this);
         setContentView(game);
 //       background = BitmapFactory.decodeResource(getResources(), R.id.background);
-//       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
 
@@ -60,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         displayWidth = displayMetrics.widthPixels;
         System.out.println("Height/Width: " + displayHeight + "/" + displayWidth);
     }
+
 
     /**
      * Nachdem pausiert wurde und auf Fortsetzen geklickt wird, regelt diese Methode was passiert

@@ -3,12 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:layout_width="200sp"
+        android:layout_height="300sp"
+        android:id="@+id/jwKO"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:background="@drawable/jw_ko1"/>
+
+
     <TextView
         android:id="@+id/gameoverText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="400sp"
         android:textSize="50dp"
         android:textAllCaps="true"
         android:textStyle="bold"
@@ -20,12 +29,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="320dp"/>
+        android:layout_marginTop="500dp"/>
 
     <Button
         android:id="@+id/restartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginTop="550sp"
+        android:layout_centerHorizontal="true"
+        android:text="Neustarten"
+        android:onClick="restartGame"/>
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="600sp"
+        android:layout_centerHorizontal="true"
+        android:text="Beenden"
+        android:onClick="exitGame"/>
 </RelativeLayout>

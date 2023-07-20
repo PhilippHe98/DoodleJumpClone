@@ -11,15 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DoodleJumper"
         tools:targetApi="31">
-    <activity android:name=".MainActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".GameOver"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:exported="true">
+        </activity>
 </application>
 </manifest>
