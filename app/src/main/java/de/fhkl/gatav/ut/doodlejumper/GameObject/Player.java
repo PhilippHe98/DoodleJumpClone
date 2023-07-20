@@ -61,6 +61,7 @@ public class Player extends Rectangle {
     private Sprite gunRightSprite;
     private Sprite gunRightJumpSprite;
     private Sprite gunLeftJumpSprite;
+    Paint shieldPaint = new Paint();
 
     private boolean shootLeft;
     private boolean shootRight;
@@ -102,6 +103,11 @@ public class Player extends Rectangle {
 
         spriteSheet = new SpriteSheet(context, R.drawable.waffe_links_springed);
         gunLeftJumpSprite = new Sprite(spriteSheet, new Rect(0,0,2493,3716));
+
+        int shieldColor = ContextCompat.getColor(context, R.color.shield);
+        shieldPaint.setColor(shieldColor);
+        shieldPaint.setStyle(Paint.Style.STROKE);
+
     }
 
     public void update() {
@@ -194,6 +200,12 @@ public class Player extends Rectangle {
 
     @Override
     public void draw(Canvas canvas) {
+        if(isShielded) {
+            //breitenanpassen damit bild gescheit aussieht
+//            this.width = 189;
+//            playerShieldedSprite.draw(canvas, topLeft, bottomRight);
+            canvas.drawCircle((float) getPosition().x, (float) getPosition().y,100 ,shieldPaint);
+        }
         if(isJetpack) {
             jetpackSprite.draw(canvas, new Vector2D(position.x - 100, position.y -100), new Vector2D(position.x + 100, position.y + 100));
             if(shootLeft) {
@@ -208,27 +220,28 @@ public class Player extends Rectangle {
             playerSprite.draw(canvas, topLeft, bottomRight);
             return;
         }
+        if(isJumping) {
+            if(shootLeft) {
+                this.width = 125;
+                gunLeftJumpSprite.draw(canvas, topLeft, bottomRight);
+                return;
+            }
+            if(shootRight) {
+                this.width = 125;
+                gunRightJumpSprite.draw(canvas,topLeft, bottomRight);
+                return;
+            }
+        }
         if(shootLeft) {
-            gunLeftJumpSprite.draw(canvas,topLeft,bottomRight);
+            gunLeftSprite.draw(canvas,topLeft,bottomRight);
             return;
         }
         if (shootRight) {
-            gunRightJumpSprite.draw(canvas,topLeft,bottomRight);
+            gunRightSprite.draw(canvas,topLeft,bottomRight);
             return;
         }
-        if(isShielded) {
-            //breitenanpassen damit bild gescheit aussieht
-            this.width = 189;
-            playerShieldedSprite.draw(canvas, topLeft, bottomRight);
-            return;
-        }
-        if(isJumping) {
-            this.width = 145;
-            playerJumpingSprite.draw(canvas,topLeft,bottomRight);
-            return;
-        }
-        this.width = 100;
-        playerSprite.draw(canvas, topLeft, bottomRight);
+        this.width = 120;
+        gunRightSprite.draw(canvas, topLeft, bottomRight);
     }
 
     public void moveSideways(float accelerationX) {
