@@ -412,7 +412,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
         drawFPS(canvas);
         drawUPS(canvas);
 
-        canvas.drawText(""+score, 900, 50, textPaint);
+         canvas.drawText(""+score, 900, 50, textPaint);
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -422,30 +422,21 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, SensorE
                 // Starte das Spiel, wenn der Bildschirm berührt wird und das Hauptmenü sichtbar ist
                 isMainMenuVisible = false;
             }
-        }
-            else {
-                switch(event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        // Schieße ein Projektil, wenn der Bildschirm berührt wird und das Spiel läuft
-                        Vector2D direction = new Vector2D(event.getX(),event.getY()).subtract(playerPosition);
-                        direction.normalize();
-                        System.out.println(direction);
-                        Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20,20);
-                        soundPool.play(soundIds[2], 1F,1F,1, 0,1.0F);
-                        projectiles.add(projectile);
-                        System.out.println("Feuer!");
-                        if(event.getX() - player.getPosition().x > 0) {
-                            player.setShootRight(true);
-                            player.setShootLeft(false);
-                        } else {
-                            player.setShootRight(false);
-                            player.setShootLeft(true);
-
-                        }
-                        break;
-                }
-                return true;
+            Vector2D direction = new Vector2D(event.getX(), event.getY()).subtract(playerPosition);
+            direction.normalize();
+            System.out.println(direction);
+            Projectile projectile = new Projectile(getContext(), player.getPosition(), direction, 20, 20);
+            soundPool.play(soundIds[2], 1F, 1F, 1, 0, 1.0F);
+            projectiles.add(projectile);
+            System.out.println("Feuer!");
+            if (event.getX() - player.getPosition().x > 0) {
+                player.setShootRight(true);
+                player.setShootLeft(false);
+            } else {
+                player.setShootRight(false);
+                player.setShootLeft(true);
             }
+        }
 
         return super.onTouchEvent(event);
     }

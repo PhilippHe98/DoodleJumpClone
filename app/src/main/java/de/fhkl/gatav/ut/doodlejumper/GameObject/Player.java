@@ -52,7 +52,6 @@ public class Player extends Rectangle {
      * (Gibt bestimmt einen besseren Ansatz, aber mir fällt nix ein =) )
     **/
     private static int counter = 0;
-
     private Sprite playerSprite;
     private Sprite playerShieldedSprite;
     private Sprite playerJumpingSprite;
@@ -62,7 +61,6 @@ public class Player extends Rectangle {
     private Sprite gunRightJumpSprite;
     private Sprite gunLeftJumpSprite;
     Paint shieldPaint = new Paint();
-
     private boolean shootLeft;
     private boolean shootRight;
     private boolean isShielded = false;
