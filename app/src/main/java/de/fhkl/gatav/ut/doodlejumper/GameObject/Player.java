@@ -240,6 +240,7 @@ public class Player extends Rectangle {
             gunRightSprite.draw(canvas,topLeft,bottomRight);
             return;
         }
+        shootRight = true;
         this.width = 120;
         gunRightSprite.draw(canvas, topLeft, bottomRight);
     }

@@ -15,7 +15,7 @@ import de.fhkl.gatav.ut.doodlejumper.util.Vector2D;
 
 public class hoveringEnemy extends Enemy {
 
-    private static final double PIXEL_PER_UPDATE = 1;
+    private static final double PIXEL_PER_UPDATE = 3;
 
     private Vector2D velocity = new Vector2D(PIXEL_PER_UPDATE,0);
 
@@ -30,7 +30,10 @@ public class hoveringEnemy extends Enemy {
     @Override
     public void update() {
         if(position.x < 0) moveRight();
-        if(position.x > 1000) moveLeft();
+        else if(position.x > 1000) moveLeft();
+        else{
+            moveRight();
+        }
         moveDown();
     }
     @Override
@@ -46,7 +49,6 @@ public class hoveringEnemy extends Enemy {
     private void moveLeft() {
         velocity.set(-PIXEL_PER_UPDATE, velocity.y);
     }
-
 
     @Override
     public Sprite getSprite() {
